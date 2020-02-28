@@ -10,7 +10,7 @@
 
 static bool get_options(const int argc, char ** const argv, double &jump_prob,
 		std::string &personalize_filename, personalization_t &personalize_type,
-		int &personalize_extra, std::string &comm_percentage_filename)
+		int &personalize_extra, std::string &comm_percentage_filename, bool &top_k, int &k)
 {
 	if (argc == 1)
 	{
@@ -43,12 +43,21 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 			personalize_type = personalization_t::NO_PERSONALIZATION;
 			comm_percentage_filename = argv[2];
 		}
+		// Sotiris Tsiou try to read k for topk from command line.
+		else if (!std::strcmp(argv[1], "-tk"))
+		{
+			
+			top_k = true;
+			k = std::atoi(argv[2]);
+			personalize_type = personalization_t::NO_PERSONALIZATION;
+			jump_prob = 0.15;
+		}
 		else
 			goto error;
 	}
 	else if ((argc == 5) || (argc == 6))
 	{
-		if (std::strcmp(argv[1], "-j") || (std::strcmp(argv[3], "-pn") && std::strcmp(argv[3], "-pa")))
+		if ((std::strcmp(argv[1], "-j") || (std::strcmp(argv[3], "-pn") && std::strcmp(argv[3], "-pa"))) && (std::strcmp(argv[1], "-tk") || std::strcmp(argv[3], "-c")))
 			goto error;
 		jump_prob = std::stod(argv[2]);
 		if (!std::strcmp(argv[3], "-pn"))
@@ -58,9 +67,16 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 		}
 		else if (!std::strcmp(argv[3], "-pa"))
 		{
-			personalize_filename = argv[4];
-			personalize_extra = std::atoi(argv[4]);
+			personalize_filename = argv[4]; // Both ???
+			personalize_extra = std::atoi(argv[4]); // Both ??
 			personalize_type = personalization_t::ATTRIBUTE_PERSONALIZATION;
+		}
+		else if (!std::strcmp(argv[1], "-tk") && !std::strcmp(argv[3], "-c")) {
+			top_k = true;
+			k = std::atoi(argv[2]);
+			jump_prob = 0.15;
+			personalize_type = personalization_t::NO_PERSONALIZATION;
+			comm_percentage_filename = argv[4];
 		}
 	}
 	else
@@ -73,9 +89,10 @@ error:
 	std::cerr << "Usage: " << argv[0] << " [options]\n"
 		"Options:\n"
 		"-j <jump_prob>\t\t\tprobability of doing a random jump; if not defined it is 0.15\n"
-		"-pa <personalize_filename> <attribute_id>\tfilename for the attribute personalization and attribute id\n"
+		"-pa <personalize_filename> <attribute_id>\tfilename for the attribute personalization and attribute id\n" // Id personalization
 		"-pn <node_id>\t\t\tnode id for node personalization\n"
-		"-c <comm_percent_filename> \tfilename for custom community percentage" << std::endl;
+		"-c <comm_percent_filename> \tfilename for custom community percentage\n"
+		"-tk <K for fairness in top k> \tprovide integer > 0, < number of nodes" << std::endl;
 	return false;
 }
 
@@ -131,7 +148,7 @@ static void save_pagerank(std::string filename_prefix, pagerank_v &pagerankv, gr
 	std::ofstream outfile_pagerank;
 	outfile_pagerank.open("out_" + filename_prefix + "_pagerank.txt");
 	//std::ofstream outfile_label_ranking;
-	//outfile_label_ranking.open("out_" + filename_prefix + "_label_ranking.txt");
+	////outfile_label_ranking.open("out_" + filename_prefix + "_label_ranking.txt");
 	//std::ofstream outfile_sums;
 	//outfile_sums.open("out_" + filename_prefix + "_sums.txt");
 	std::ofstream outfile_sums_perc;
@@ -255,42 +272,74 @@ int main(int argc, char **argv)
 	std::string personalize_filename, comm_percentage_filename = "";
 	personalization_t personalize_type;
 	int personalize_extra = 0;
+	bool topk = false; // If -tk is provided.
+	int k = 0; // The K for topk.
 	if (!get_options(argc, argv, jump_prob, personalize_filename, personalize_type,
-				personalize_extra, comm_percentage_filename))
+				personalize_extra, comm_percentage_filename, topk, k))
 		return 1;
 
 	std::ofstream out_summary("summary.txt");
 	graph g("out_graph.txt", "out_community.txt");
-	if (personalize_type == personalization_t::ATTRIBUTE_PERSONALIZATION)
-		g.load_attributes(personalize_filename);
-	if (comm_percentage_filename != "")
-		g.load_community_percentage(comm_percentage_filename);
-	pagerank_algorithms algs(g);
-	algs.set_personalization_type(personalize_type, personalize_extra);
+	//Sotiris Tsiou Separate topk alforithms from total.
+	if (topk)
+	{
+		if (comm_percentage_filename != "")
+			g.load_community_percentage(comm_percentage_filename);
 
-	print_preamble(out_summary, g);
+		pagerank_algorithms algs(g);
+		algs.set_personalization_type(personalize_type, personalize_extra);
 
-	print_algo_info("Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerank_v pagerankv = algs.get_pagerank(1 - jump_prob);
-	save_pagerank("pagerank", pagerankv, g, algs, out_summary);
+		print_preamble(out_summary, g);
 
-	print_algo_info("global uniform Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerankv = algs.get_global_uniform_fair_pagerank(1 - jump_prob);
-	save_pagerank("global_uniform", pagerankv, g, algs, out_summary);
+		//Call pure pagerank.
+		print_algo_info("Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerank_v pagerankv = algs.get_pagerank(1 - jump_prob);
+		save_pagerank("pagerank", pagerankv, g, algs, out_summary);
 
-	print_algo_info("global proportional Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerankv = algs.get_global_proportional_fair_pagerank(1 - jump_prob);
-	save_pagerank("global_proportional", pagerankv, g, algs, out_summary);
+		print_algo_info("lfpr neighborhood topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprn_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_n_topk", pagerankv, g, algs, out_summary);
 
-	print_algo_info("lfpr uniform", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerankv = algs.get_step_uniform_fair_pagerank(1 - jump_prob);
-	save_pagerank("lfpr_u", pagerankv, g, algs, out_summary);
+		print_algo_info("lfpr uniform topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfpru_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_u_topk", pagerankv, g, algs, out_summary);
 
-	print_algo_info("lfpr proportional", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerankv = algs.get_step_proportional_fair_pagerank(1 - jump_prob);
-	save_pagerank("lfpr_p", pagerankv, g, algs, out_summary);
+		print_algo_info("lfpr proportional topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprp_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_p_topk", pagerankv, g, algs, out_summary);
+	} else 
+	{
+		if (personalize_type == personalization_t::ATTRIBUTE_PERSONALIZATION)
+			g.load_attributes(personalize_filename);
+		if (comm_percentage_filename != "")
+			g.load_community_percentage(comm_percentage_filename);
+		pagerank_algorithms algs(g);
+		algs.set_personalization_type(personalize_type, personalize_extra);
 
-	print_algo_info("lfpr neighborhood", out_summary, personalize_type, jump_prob, personalize_extra);
-	pagerankv = algs.get_local_fair_pagerank(1 - jump_prob);
-	save_pagerank("lfpr_n", pagerankv, g, algs, out_summary);
+		print_preamble(out_summary, g);
+
+		print_algo_info("Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerank_v pagerankv = algs.get_pagerank(1 - jump_prob);
+		save_pagerank("pagerank", pagerankv, g, algs, out_summary);
+
+		print_algo_info("global uniform Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_global_uniform_fair_pagerank(1 - jump_prob);
+		save_pagerank("global_uniform", pagerankv, g, algs, out_summary);
+
+		print_algo_info("global proportional Pagerank", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_global_proportional_fair_pagerank(1 - jump_prob);
+		save_pagerank("global_proportional", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfpr uniform", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_step_uniform_fair_pagerank(1 - jump_prob);
+		save_pagerank("lfpr_u", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfpr proportional", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_step_proportional_fair_pagerank(1 - jump_prob);
+		save_pagerank("lfpr_p", pagerankv, g, algs, out_summary);
+
+		print_algo_info("local neighborhood", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_local_fair_pagerank(1 - jump_prob);
+		save_pagerank("lfpr_n", pagerankv, g, algs, out_summary);
+	}
 }
