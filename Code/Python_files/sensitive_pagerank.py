@@ -192,7 +192,6 @@ M,index = create_adj_matrix()
 
 if pr == 0:
     pr = get_red_ratio(index)
-print("phi: ", pr)
 
 # Get fair pagerank and corresponding jump vector.
 j,fp = fairPR(M,index, pr)
