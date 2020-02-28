@@ -19,23 +19,11 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 	}
 	else if ((argc == 3) || (argc == 4))
 	{
-		if (!std::strcmp(argv[1], "-j"))
-		{
-			personalize_type = personalization_t::NO_PERSONALIZATION;
-			jump_prob = std::stod(argv[2]);
-		}
-		else if (!std::strcmp(argv[1], "-pn"))
+		if (!std::strcmp(argv[1], "-pn"))
 		{
 			jump_prob = 0.15;
 			personalize_type = personalization_t::NODE_PERSONALIZATION;
 			personalize_extra = std::atoi(argv[2]);
-		}
-		else if (!std::strcmp(argv[1], "-pa"))
-		{
-			jump_prob = 0.15;
-			personalize_filename = argv[2];
-			personalize_extra = std::atoi(argv[3]);
-			personalize_type = personalization_t::ATTRIBUTE_PERSONALIZATION;
 		}
 		else if (!std::strcmp(argv[1], "-c"))
 		{
@@ -43,10 +31,8 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 			personalize_type = personalization_t::NO_PERSONALIZATION;
 			comm_percentage_filename = argv[2];
 		}
-		// Sotiris Tsiou try to read k for topk from command line.
 		else if (!std::strcmp(argv[1], "-tk"))
 		{
-			
 			top_k = true;
 			k = std::atoi(argv[2]);
 			personalize_type = personalization_t::NO_PERSONALIZATION;
@@ -55,28 +41,16 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 		else
 			goto error;
 	}
-	else if ((argc == 5) || (argc == 6))
+	else if (argc == 5)
 	{
-		if ((std::strcmp(argv[1], "-j") || (std::strcmp(argv[3], "-pn") && std::strcmp(argv[3], "-pa"))) && (std::strcmp(argv[1], "-tk") || std::strcmp(argv[3], "-c")))
-			goto error;
-		jump_prob = std::stod(argv[2]);
-		if (!std::strcmp(argv[3], "-pn"))
-		{
-			personalize_type = personalization_t::NODE_PERSONALIZATION;
-			personalize_extra = std::atoi(argv[4]);
-		}
-		else if (!std::strcmp(argv[3], "-pa"))
-		{
-			personalize_filename = argv[4]; // Both ???
-			personalize_extra = std::atoi(argv[4]); // Both ??
-			personalize_type = personalization_t::ATTRIBUTE_PERSONALIZATION;
-		}
-		else if (!std::strcmp(argv[1], "-tk") && !std::strcmp(argv[3], "-c")) {
+		if (!std::strcmp(argv[1], "-tk") && !std::strcmp(argv[3], "-c")) {
 			top_k = true;
 			k = std::atoi(argv[2]);
 			jump_prob = 0.15;
 			personalize_type = personalization_t::NO_PERSONALIZATION;
 			comm_percentage_filename = argv[4];
+		} else {
+			goto error;
 		}
 	}
 	else
@@ -88,8 +62,6 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 error:
 	std::cerr << "Usage: " << argv[0] << " [options]\n"
 		"Options:\n"
-		"-j <jump_prob>\t\t\tprobability of doing a random jump; if not defined it is 0.15\n"
-		"-pa <personalize_filename> <attribute_id>\tfilename for the attribute personalization and attribute id\n" // Id personalization
 		"-pn <node_id>\t\t\tnode id for node personalization\n"
 		"-c <comm_percent_filename> \tfilename for custom community percentage\n"
 		"-tk <K for fairness in top k> \tprovide integer > 0, < number of nodes" << std::endl;
