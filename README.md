@@ -3,7 +3,15 @@ Fairness-Aware Link Analysis
 
 General Informations.
 ---------------------
-(Pending)
+This repository has been created to distribute freely our implementation of the algorithms described at the "Fairness-Aware Link Analysis" paper. It also includes the datasets described and used in the forthmentioned paper plus some extra dataset from various resources.
+
+### Repository Structure:<br/>
+- FairLar
+    - Code
+    - Datasets
+
+### How to run the algorithms:<br/>
+blah blah blah
 
 Datasets Dascription.
 ---------
