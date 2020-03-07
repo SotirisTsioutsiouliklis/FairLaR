@@ -204,6 +204,6 @@ fp = np.array(fp).flatten()
 with open("out_sensitive_jump_v.txt", "w") as file_one:
     for i in j:
         file_one.write(str(i) + "\n")
-with open("out_sensitive_pagerank.txt", "w") as file_one:
+with open("out_sensitive.txt", "w") as file_one:
     for i in fp:
         file_one.write(str(i) + "\n")

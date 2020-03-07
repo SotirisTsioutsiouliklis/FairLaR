@@ -1,4 +1,4 @@
-""" Solves the optimization problem of targeted Sensitive Pagerank.
+""" Solves the optimization problem of targeted Pagerank.
 
 It solves the targeted optimization problem as described
 in "Fairness-Aware Link Analysis"[1] paper. It always chooses the top
@@ -39,7 +39,7 @@ def get_red_ratio(index):
     return ratio
 
 def uniformPR(M, gamma = 0.15):
-    """Returns the Pagerank and the Q matrix.
+    """ Returns the Pagerank and the Q matrix.
     
     Q: P(v) = Qv and v is the unifrom vector (i.e. v(i) -= 1/N).
     N:= number of nodes.
@@ -65,6 +65,14 @@ def uniformPR(M, gamma = 0.15):
     return (p,Q)
 
 def new_index(p, index):
+    """ Return top-k indexes.
+
+    Returns:
+        index_new (pytho list): index_new[i] == true if node i is red
+            and is in top-k nodes of pagerank.
+        top_k (python list): top_k[i] == true if node i is in top-k
+            nodes of pagerank.
+    """
     n = len(p)
     sorted_index = np.argsort(-p)
 
@@ -78,23 +86,52 @@ def new_index(p, index):
     return index_new, top_k
 
 def fairPR(M, index, phi, k):
+    """ Returns minimizer jump vector, corresponding pagerank.
+
+    Parameters:
+        M (nd.array): Adjacency Matrix.
+        index (python list): index[i] == True if node i belongs
+            to protected category (i.e. category 1). 
+        phi (float): Wanted ratio for protected category.
+        k (int): Number of nodes for the targeted algorithm.
+
+    Returns:
+        x (CVX 1D matrix): Minimizer jump vector.
+        Q*x (CVX 1D matrix): Optimal pagerank vector.
+    """
     p,Q = uniformPR(M)
-    index_top_k_1, index_top_k = new_index(p, index)#true if in protected category(1) and on top-k.
+    index_top_k_1, index_top_k = new_index(p, index)
     n = p.size
     G = matrix([matrix(-1*np.eye(n))])
-    h = matrix([matrix(np.zeros(n))]) # inequality constraint seems correct
+    h = matrix([matrix(np.zeros(n))])
     A = matrix([matrix((Q[index_top_k_1,:].sum(0) - (phi * Q[index_top_k,:]).sum(0))),matrix(np.ones(n))],(n,2)).T
     b = matrix([0.,1.])
     Q = matrix(Q)
     p = matrix(p)
-    x = solvers.qp(P = Q.T*Q, q=-Q.T*p, G=G, h=h,A=A,b=b)['x'] # seems correct
+    x = solvers.qp(P = Q.T*Q, q=-Q.T*p, G=G, h=h,A=A,b=b)['x']
 
     p, Z = uniformPR(M)
-    check_solution(index, p, Q*x, k)
     
-    return (x,Q*x) # optimal jump vector, corresponding pagerank
+    return (x,Q*x)
    
 def create_adj_matrix(filename = "out_graph.txt"):
+    """ Creates Adjacency matrix and index list.
+
+    Parameters:
+        edge_file (txt file): edge list file in proper format.
+        com_file (txt file): community file in proper format.
+
+    Returns:
+        M (nd.array): Adjacency Matrix.
+        index (python list): index[i] == True if node i belongs to protected
+            category (i.e. category 1).
+    
+    Notes:
+        See specifications for the files in general description
+        of the project.
+        
+    TODO: Add link for the general specifications.
+    """
     n = 0
     with open(filename, "r") as file_one:
         n = int(file_one.readline())
@@ -120,33 +157,34 @@ def create_adj_matrix(filename = "out_graph.txt"):
         if not M[i].any():
             j += 1
             M[i] = [1. for k in M[i]]
-    print("%d vectors without out neighbors" %j)
 
     return M, index
 
+# Rsad command line arguments.
 if len(sys.argv) != 3:
     print("provide 2 arguments <ratio for protected category>, <top-k>")
 else:
     pr = float(sys.argv[1])
     k = int(sys.argv[2])
 
-
+# Get Adjacency Matrix and index vector
+# (index[i] == true if node i belongs to protected category).
 M, index = create_adj_matrix()
 
 if pr == 0:
     pr = get_red_ratio(index)
 
+# Get fair pagerank and corresponding jump vector.
 j, fp = fairPR(M,index, pr, k)
 
+# Change from data type cvx matrix to numpy array.
 j = np.array(j).flatten()
 fp = np.array(fp).flatten()
 
-with open("out_sensitive_topk_jump_v.txt", "w") as file_one:
+# Store results in text files.
+with open("out_targeted_jump_v.txt", "w") as file_one:
     for i in j:
         file_one.write(str(i) + "\n")
-with open("out_sensitive_topk_pagerank.txt", "w") as file_one:
+with open("out_targeted.txt", "w") as file_one:
     for i in fp:
         file_one.write(str(i) + "\n")
-
-
-
