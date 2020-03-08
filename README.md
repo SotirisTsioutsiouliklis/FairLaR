@@ -27,7 +27,7 @@ All the experiments were made in linux UBUNTU.
 
 2. Pagerank, LFPR_N, LFPR_U, LFPR_P:
 
-    You should run the **`./pagerank.out`** inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. Structure of these files described [here](#datasets-description). You have the following options:
+    You should run the `./pagerank.out` inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. Structure of these files described [here](#datasets-description). You have the following options:
 
     > `./pagerank.out` : Run the forth mentioned algorithms algorithms with phi = ratio of protected category.<br/><br/>
     `./pagerank.out -c <community_file>` : Run the forth mentioned algorithms with phi described in <community_file>. Community file is a txt file in which id line is a pair of an integer and a float separated with empty space. The integer is the id of the group while the float is tha wanted ratio for this group. There should be as many lines as the groups of the nodes and the sum of the floats should be equal to 1. (e.g. 0 0.3 \n 1 0.7)<br/><br/>
@@ -41,13 +41,13 @@ All the experiments were made in linux UBUNTU.
 
 3. Personilized by node pagerank for all nodes of a network:
 
-    You should run the **`./person_all_nodes.out`** inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file.
+    You should run the `./person_all_nodes.out` inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file.
 
     > `./person_all_nodes.out`
 
 4. Sensitive:
 
-    You should run the **`./sensitive.py`** inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. You should also provide phi = wanted ratio for the protected group. If phi = 0, then phi = ratio of protected group.
+    You should run the `./sensitive.py` inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. You should also provide phi = wanted ratio for the protected group. If phi = 0, then phi = ratio of protected group.
 
     >`python sensitive.py 0.5`
 
@@ -61,17 +61,15 @@ All the experiments were made in linux UBUNTU.
 
 Datasets-Description.
 ---------
-
+Datasets provided have been collected from various resources. They are graphs with a binary attribute for each node. Every dataset is consisted of two txt files. "out_graph.txt" and "out_community.txt".
     
-   Datasets provided have been collected from various resources. They are graphs with a binary attribute for each node. Every dataset is consisted of two txt files. "out_graph.txt" and "out_community.txt".
-    
-    "out_graph.txt" is the edge list of the graph. First line of the file is the number of the nodes. Every other line is a pair of node ids (pair of integers) separated by an empty space. line "32 46" denotes an edge from node with id 32 to node with id 46. Every edge is assumed to be directed. So if the graph is undirected for every edge "i j" there is also the edge "j i".
+"out_graph.txt" is the edge list of the graph. First line of the file is the number of the nodes. Every other line is a pair of node ids (pair of integers) separated by an empty space. line "32 46" denotes an edge from node with id 32 to node with id 46. Every edge is assumed to be directed. So if the graph is undirected for every edge "i j" there is also the edge "j i".
 
-    "out_community.txt" includes the group for every node. The first line of the file is the number of groups in the graph. Every other line is a pair of integers. First integer is a node id and the se cond integer is the group that the specific node belongs to. "34 1" denotes that node with id 43 belongs to group 1.
+"out_community.txt" includes the group for every node. The first line of the file is the number of groups in the graph. Every other line is a pair of integers. First integer is a node id and the se cond integer is the group that the specific node belongs to. "34 1" denotes that node with id 43 belongs to group 1.
 
-    Nodes' ids should be from 0 to n without missing numbers. The same holds for groups' ids.
+Nodes' ids should be from 0 to n without missing numbers. The same holds for groups' ids.
 
-    All above conventions are important for the proper function of the algorithms.
+**All above conventions are important for the proper function of the algorithms.**
 
-    In the datasets provided we have done the forth mentioned preprocessing. In cases where nodes in the graph hadn't have group information we removed them from the graph. We have also kept only the largest weak component of each graph.
+In the datasets provided we have done the forth mentioned preprocessing. In cases where nodes in the graph hadn't have group information we removed them from the graph. We have also kept only the largest weak component of each graph.
     
