@@ -8,7 +8,7 @@ General Informations.
 ---------------------
 This repository has been created to distribute freely our implementations of the algorithms described at the "Fairness-Aware Link Analysis" paper. It also includes the datasets described and used in the forthmentioned paper plus some extra dataset from various resources.
 
-All the experiments were made in linux UBUNTU.
+All the experiments were made in linux Ubuntu.
 
 ### Repository Structure:<br/>
 - FairLar
@@ -27,7 +27,7 @@ All the experiments were made in linux UBUNTU.
 
 2. Pagerank, LFPR_N, LFPR_U, LFPR_P:
 
-    You should run the `./pagerank.out` inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. Structure of these files described [here](#datasets-description). You have the following options:
+    You should run the `./pagerank.out` inside the dataset's folder, which should contain the "out_graph.txt" file and the "out_community.txt" file. Structure of these files described in [Datasets Description](#datasets-description). You have the following options:
 
     > `./pagerank.out` : Run the forth mentioned algorithms algorithms with phi = ratio of protected category.<br/><br/>
     `./pagerank.out -c <community_file>` : Run the forth mentioned algorithms with phi described in <community_file>. Community file is a txt file in which id line is a pair of an integer and a float separated with empty space. The integer is the id of the group while the float is tha wanted ratio for this group. There should be as many lines as the groups of the nodes and the sum of the floats should be equal to 1. (e.g. 0 0.3 \n 1 0.7)<br/><br/>
@@ -72,4 +72,26 @@ Nodes' ids should be from 0 to n without missing numbers. The same holds for gro
 **All above conventions are important for the proper function of the algorithms.**
 
 In the datasets provided we have done the forth mentioned preprocessing. In cases where nodes in the graph hadn't have group information we removed them from the graph. We have also kept only the largest weak component of each graph.
+
+### Datasets:
+
+1. Blogs
+1. Books
+1. DBLP Aminer
+1. DBLP ours 1
+1. DBLP ours 2
+1. Github female ours
+1. Github male ours
+1. Karate
+1. Linkedin
+1. Physics High Energy Citation Network.
+    
+    https://snap.stanford.edu/data/cit-HepPh.html
+
+1. Pokec
+
+    https://snap.stanford.edu/data/soc-Pokec.html
+
+1. Tmdb
+1. Twitter
     
