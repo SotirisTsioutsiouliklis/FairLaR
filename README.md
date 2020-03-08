@@ -107,9 +107,9 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
     The famous Zachary's club clustered. You can find original dataset here: http://www-personal.umich.edu/~mejn/netdata/
 
-1. Linkedin
+1. Linkedin (aminer)
 
-    Nodes correspond to LinkedIn profiles. Two profiles are linked if they were co-viewed by the same user. You can find the original dataset here: .
+    Nodes correspond to LinkedIn profiles. Two profiles are linked if they were co-viewed by the same user. You can find the original dataset here: https://www.aminer.cn/data-sna#Linkedin.
 
 1. Physics High Energy Citation Network.
 
@@ -121,7 +121,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 1. Tmdb
 
-    Pending.
+    This is a collaboration network between actors. (Pending more details)
 
 1. Twitter
 
