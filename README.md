@@ -76,22 +76,55 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 ### Datasets:
 
 1. Blogs
+
+    A directed network of hyperlinks between weblogs on US politic. You can find more informations about this dataset here: L. A. Adamic and N. S. Glance. 2005. The political blogosphere and the 2004 U.S. election: divided they blog. In LinkKDD.
+
 1. Books
+
+    A network of books about US politics where edges 1 between books represented co-purchasing. You can find the original dataset here: http://www-personal.umich.edu/~mejn/netdata/.
+
 1. DBLP Aminer
+
+    An author collaboration network constructed by the Arnetminer academic search system using publication data from dblp. Two authors are connected if they have co-authored an article. You can find the original dataset here .
+
 1. DBLP ours 1
+
+    An author collaboration network constructed from DBLP including a subset of data mining and database con-ferences.
+
 1. DBLP ours 2
+
+    An author collaboration network constructed from DBLP including a subset of data mining and database con-ferences.
+
 1. Github female ours
+
+    Pending.
+
 1. Github male ours
+
+    Pending.
+
 1. Karate
+
+    The famous Zachary's club clustered. You can find original dataset here: http://www-personal.umich.edu/~mejn/netdata/
+
 1. Linkedin
+
+    Nodes correspond to LinkedIn profiles. Two profiles are linked if they were co-viewed by the same user. You can find the original dataset here: .
+
 1. Physics High Energy Citation Network.
-    
-    https://snap.stanford.edu/data/cit-HepPh.html
+
+    This is the Arxiv HEP-PH (high energy physics 3 phenomenology) citation graph from the SNAP dataset . Nodes correspond to papers and there is an edge from a paper to another, if the first paper cites the second one. You can find the original dataset here: https://snap.stanford.edu/data/cit-HepPh.html.
 
 1. Pokec
 
-    https://snap.stanford.edu/data/soc-Pokec.html
+    This is a Slovak social network. Nodes corre- spond to users, and links to friendships. Friendship relations are directed. You can find the original dataset here: https://snap.stanford.edu/data/soc-Pokec.html.
 
 1. Tmdb
+
+    Pending.
+
 1. Twitter
+
+    A political retweet graph from "Ryan A. Rossi and Nesreen K. Ahmed. 2015. The Network Data Repository with InteractiveGraphAnalyticsandVisualization.InAAAI.  You can find the original dataset here: http://networkrepository.com"
+
     
