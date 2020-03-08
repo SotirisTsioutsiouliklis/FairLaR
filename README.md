@@ -119,7 +119,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
     This is a Slovak social network. Nodes corre- spond to users, and links to friendships. Friendship relations are directed. You can find the original dataset here: https://snap.stanford.edu/data/soc-Pokec.html.
 
-1. Tmdb
+1. Tmdb ours
 
     This is a collaboration network between actors. (Pending more details)
 
