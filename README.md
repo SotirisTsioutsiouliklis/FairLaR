@@ -59,7 +59,7 @@ All the experiments were made in linux UBUNTU.
       `python targeted_optimal.py 0.5 10`<br/><br/>
       `python targeted_topk.py 0.5 10`
 
-Datasets-Description.
+Datasets Description.
 ---------
 Datasets provided have been collected from various resources. They are graphs with a binary attribute for each node. Every dataset is consisted of two txt files. "out_graph.txt" and "out_community.txt".
     
