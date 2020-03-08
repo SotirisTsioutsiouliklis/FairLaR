@@ -97,11 +97,11 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 1. Github female ours
 
-    Pending.
+    (Pending details about mining)
 
 1. Github male ours
 
-    Pending.
+    (Pending details about mining)
 
 1. Karate
 
@@ -121,7 +121,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 1. Tmdb ours
 
-    This is a collaboration network between actors. (Pending more details)
+    This is a collaboration network between actors. (Pending details about mining)
 
 1. Twitter
 
