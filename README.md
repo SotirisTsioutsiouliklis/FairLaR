@@ -85,7 +85,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 1. DBLP Aminer
 
-    An author collaboration network constructed by the Arnetminer academic search system using publication data from dblp. Two authors are connected if they have co-authored an article. You can find the original dataset here .
+    An author collaboration network constructed by the Arnetminer academic search system using publication data from dblp. Two authors are connected if they have co-authored an article. You can find the original dataset here: https://www.aminer.cn/aminernetwork.
 
 1. DBLP ours 1
 
