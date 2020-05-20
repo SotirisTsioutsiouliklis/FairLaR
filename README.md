@@ -138,4 +138,4 @@ TODO:
 - [ ] Add auxiliary .ipynb file for automate experiment process.
 - [ ] Remove unused variables from cpp file.
 - [x] Fix option for custom ratio in node personilized mode.
-- [x] Add informations about dependencies in separate section.
+- [x] Add information about dependencies in separate section.
