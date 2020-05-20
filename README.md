@@ -8,7 +8,11 @@ General Informations.
 ---------------------
 This repository has been created to distribute freely our implementations of the algorithms described at the "Fairness-Aware Link Analysis" paper. It also includes the datasets described and used in the forthmentioned paper plus some extra dataset from various resources.
 
-All the experiments were made in linux Ubuntu.
+### Dependencies:<br/>
+- Python 3.
+- C++ 11.
+
+All the experiments were made in linux Ubuntu. To compile cpp we used gcc compiler.
 
 ### Repository Structure:<br/>
 - FairLar
