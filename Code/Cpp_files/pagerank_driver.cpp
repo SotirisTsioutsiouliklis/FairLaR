@@ -49,6 +49,11 @@ static bool get_options(const int argc, char ** const argv, double &jump_prob,
 			jump_prob = 0.15;
 			personalize_type = personalization_t::NO_PERSONALIZATION;
 			comm_percentage_filename = argv[4];
+		} else if (!std::strcmp(argv[1], "-pn") && !std::strcmp(argv[3], "-c")) {
+			jump_prob = 0.15;
+			personalize_type = personalization_t::NODE_PERSONALIZATION;
+			personalize_extra = std::atoi(argv[2]);
+			comm_percentage_filename = argv[4];
 		} else {
 			goto error;
 		}
