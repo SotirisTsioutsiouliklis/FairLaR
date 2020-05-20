@@ -32,7 +32,7 @@ All the experiments were made in linux Ubuntu.
     > `./pagerank.out` : Run the forth mentioned algorithms algorithms with phi = ratio of protected category.<br/><br/>
     `./pagerank.out -c <community_file>` : Run the forth mentioned algorithms with phi described in <community_file>. Community file is a txt file in which id line is a pair of an integer and a float separated with empty space. The integer is the id of the group while the float is tha wanted ratio for this group. There should be as many lines as the groups of the nodes and the sum of the floats should be equal to 1. (e.g. 0 0.3 \n 1 0.7)<br/><br/>
     `./pagerank.out -pn <node>` : Run the forthmentioned algorithms in personilized - by node - mode. \<node\> is an integer - the id of the node.<br/><br/>
-    `.pagerank.out -tk <k>/` : Run the forthmetnioned algorithms in targeted mode for the top-k nodes by pagerank. \<k\> is an integer denotes the number of the nodes that will be taken into consideration.
+    `./pagerank.out -tk <k>` : Run the forthmetnioned algorithms in targeted mode for the top-k nodes by pagerank. \<k\> is an integer denotes the number of the nodes that will be taken into consideration.
 
     You can also use the following easy to understand commands. 
 
@@ -127,4 +127,8 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
     A political retweet graph from "Ryan A. Rossi and Nesreen K. Ahmed. 2015. The Network Data Repository with InteractiveGraphAnalyticsandVisualization.InAAAI.  You can find the original dataset here: http://networkrepository.com"
 
-    
+TODO:
+-----
+
+- [ ] Replace/Add person all nodes with the new more efficient algorithm.
+- [ ] Add auxiliary .ipynb file for automate experiment process.
