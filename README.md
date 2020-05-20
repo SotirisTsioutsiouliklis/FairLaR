@@ -132,3 +132,4 @@ TODO:
 
 - [ ] Replace/Add person all nodes with the new more efficient algorithm.
 - [ ] Add auxiliary .ipynb file for automate experiment process.
+- [ ] Remove unused variables from cpp file.
