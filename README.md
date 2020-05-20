@@ -137,5 +137,5 @@ TODO:
 - [ ] Replace/Add person all nodes with the new more efficient algorithm.
 - [ ] Add auxiliary .ipynb file for automate experiment process.
 - [ ] Remove unused variables from cpp file.
-- [ ] Fix option for custom ratio in node personilized mode.
+- [x] Fix option for custom ratio in node personilized mode.
 - [ ] Add informations about dependencies in separate section.
