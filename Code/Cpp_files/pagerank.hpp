@@ -30,6 +30,9 @@ public:
 			const double eps=1e-4, const int max_iter=100, const bool run_uniform=true);
 	pagerank_v get_local_fair_pagerank(const double C=0.85, const double eps=1e-4,
 			const int max_iter=100);
+	// LFPR power law Distribution,
+	pagerank_v get_lfprd(const double C=0.85, const double eps=1e-4,
+			const int max_iter=100);
 	// LFPR topk.
 	pagerank_v get_lfprn_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
 			const int max_iter=100);
@@ -37,6 +40,10 @@ public:
 			const int max_iter=100);
 	pagerank_v get_lfprp_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
 			const int max_iter=100);
+	// LFPR Hybrid topk.
+	pagerank_V get_lfprh_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
+			const int max_iter=100);
+
 
 	void set_personalization_type(personalization_t personalize_type, int extra_info);
 	void set_personalization_type(personalization_t personalize_type, std::vector<double> &jump_vector);
