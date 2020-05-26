@@ -709,8 +709,7 @@ pagerank_v pagerank_algorithms::get_lfpru_topk(const int k, const double C, cons
 			tmp_pagerank[node] = 0.0;
 			// Case topk nodes.
 			if (node_info_for_topk[node].is_at_topk)
-			{	
-				const int comm = g.get_community(node);
+			{
 				// Take pagerank from neighbors.
 				for (const int &neighbor : g.get_in_neighbors(node)) {
 					tmp_pagerank[node] += pagerankv[neighbor].pagerank * node_info_for_topk[neighbor].pagerank_for_topk;
@@ -882,8 +881,7 @@ pagerank_v pagerank_algorithms::get_lfprp_topk(const int k, const double C, cons
 			tmp_pagerank[node] = 0.0;
 			// Case topk nodes.
 			if (node_info_for_topk[node].is_at_topk)
-			{	
-				const int comm = g.get_community(node);
+			{
 				// Take pagerank from neighbors.
 				for (const int &neighbor : g.get_in_neighbors(node)) {	
 					tmp_pagerank[node] += pagerankv[neighbor].pagerank * node_info_for_topk[neighbor].pagerank_for_topk;
@@ -970,7 +968,10 @@ pagerank_v pagerank_algorithms::get_lfprhn_topk(const int k, const double C, con
 	int ncommunities = g.get_num_communities();
 	// Find topk of unfavoured category.
 	pagerank_v pagerankv(nnodes);
-	pagerankv = get_pagerank();
+	if (use_cached && is_cache_valid)
+		pagerankv = cached_pagerank;
+	else
+		pagerankv = get_pagerank(C, eps, max_iter);
 	double red_pagerank = g.get_pagerank_per_community(pagerankv)[1];
 	int unfavoured_category = (g.get_community_percentage(1) > red_pagerank) ? 1 : 0;
 	std::vector<int> unfavoured_nodes_topk(k);
