@@ -968,13 +968,12 @@ pagerank_v pagerank_algorithms::get_lfprhn_topk(const int k, const double C, con
 {
 	int nnodes = g.get_num_nodes();
 	int ncommunities = g.get_num_communities();
-
 	// Find topk of unfavoured category.
 	pagerank_v pagerankv(nnodes);
-	double red_pagerank = g.get_pagerank_per_community(pagerankv)[1];
-	int unfavoured_category = (g.get_community_percentage(1) < red_pagerank) ? 1 : 0;
-	std::vector<int> unfavoured_nodes_topk(k);
 	pagerankv = get_pagerank();
+	double red_pagerank = g.get_pagerank_per_community(pagerankv)[1];
+	int unfavoured_category = (g.get_community_percentage(1) > red_pagerank) ? 1 : 0;
+	std::vector<int> unfavoured_nodes_topk(k);
 	sort_pagerank_vector(pagerankv);
 	int temp = 0;
 
@@ -1013,54 +1012,45 @@ pagerank_v pagerank_algorithms::get_lfprhn_topk(const int k, const double C, con
 					const int nsame_com = g.count_out_neighbors_with_community(neighbor, community);
 					tmp_pagerank[node] += g.get_community_percentage(community) * pagerankv[neighbor].pagerank / (double)nsame_com;
 				}
-
-				// give percentage of pagerank to communities we have 0 neighbors to
-				for (int comm = 0; comm < ncommunities; ++comm)
-					if (g.count_out_neighbors_with_community(node, comm) == 0)
-						community_pagerank[comm] += pagerankv[node].pagerank * g.get_community_percentage(comm);
 			} else { // If in unfavoured category.
 				// take pagerank from neighbors.
 				for (const int &neighbor : g.get_in_neighbors(node)) {
 					const int nsame_com = g.count_out_neighbors_with_community(neighbor, community);
 					// If neighbor favoures me.
-					if (g.get_community_percentage(community) <= (nsame_com / (double)g.get_out_degree(neighbor))) {
+					if (g.get_community_percentage(community) / (double)nsame_com <= 1 / (double)g.get_out_degree(neighbor)) {
 						tmp_pagerank[node] += g.get_community_percentage(community) * pagerankv[neighbor].pagerank / (double)nsame_com;
 					} else { // else give excess to buckets.
-						tmp_pagerank[node] += pagerankv[neighbor].pagerank / (double)g.get_out_degree(neighbor);
-						community_pagerank[community] += (g.get_community_percentage(community) - (nsame_com / (double)g.get_out_degree(neighbor)))
+						tmp_pagerank[node] += pagerankv[neighbor].pagerank * 1 / (double)g.get_out_degree(neighbor);
+						community_pagerank[community] += ((g.get_community_percentage(community) / (double)nsame_com) - (1 / (double)g.get_out_degree(neighbor)))
 																* pagerankv[neighbor].pagerank;
-					}
-					
+					}	
 				}
-
-				// give percentage of pagerank to communities we have 0 neighbors to
-				for (int comm = 0; comm < ncommunities; ++comm)
-					if (g.count_out_neighbors_with_community(node, comm) == 0)
-						community_pagerank[comm] += pagerankv[node].pagerank * g.get_community_percentage(comm);
-
-				
 			}
-				
-
-
+			// give percentage of pagerank to communities we have 0 neighbors to
+			for (int comm = 0; comm < ncommunities; ++comm)
+				if (g.count_out_neighbors_with_community(node, comm) == 0)
+					community_pagerank[comm] += pagerankv[node].pagerank * g.get_community_percentage(comm);
 		}
-
 		// re-insert "leaked" pagerank
 		double diff = 0.0, sum = 0.0, new_val;
-		#pragma omp parallel for reduction(+:sum)
+		//#pragma omp parallel for reduction(+:sum)
 		for (unsigned int i = 0; i < tmp_pagerank.size(); ++i) {
 			const int comm = g.get_community(i);
 			// If node not in unfavoured category.
-			if (g.get_community(i) != unfavoured_category) {
-				tmp_pagerank[i] = C * (tmp_pagerank[i] + community_pagerank[comm] / (double)g.get_community_size(comm));
+			if (comm != unfavoured_category) {
+				tmp_pagerank[i] = C * (tmp_pagerank[i] + (community_pagerank[comm] / (double)g.get_community_size(comm)));
 				sum += tmp_pagerank[i];
+			} else {
+				//tmp_pagerank[i] = C * (tmp_pagerank[i] + (community_pagerank[comm] / (double)g.get_community_size(comm)));
+				//sum += tmp_pagerank[i];
+				
+				if (std::find(unfavoured_nodes_topk.begin(), unfavoured_nodes_topk.end(), i) == unfavoured_nodes_topk.end()) {	
+					sum += tmp_pagerank[i];
+				} else { 
+					tmp_pagerank[i] = C * (tmp_pagerank[i] + (community_pagerank[comm] / k));
+					sum += tmp_pagerank[i];
+				}
 			}
-		}
-		// Give to topk unfavoured.
-		for (int &i : unfavoured_nodes_topk) {
-			const int comm = g.get_community(i);
-			tmp_pagerank[i] = C * (tmp_pagerank[i] + community_pagerank[comm] / (double)k);
-			sum += tmp_pagerank[i];
 		}
 
 		const double leaked = (C - sum); // for all nodes
@@ -1299,10 +1289,10 @@ std::vector<double> pagerank_algorithms::get_hybrid_policy(const int k, const do
 	// Find unfavoured category.
 	pagerank_v pagerankv = get_pagerank();
 	double red_pagerank = g.get_pagerank_per_community(pagerankv)[1];
-	int unfavoured_category = (g.get_community_percentage(1) < red_pagerank) ? 1 : 0;
+	int unfavoured_category = (g.get_community_percentage(1) > red_pagerank) ? 1 : 0;
 
 	// Find excess for unfavoured category.
-	std::vector<node_info_t> node_info(nnodes);
+	std::vector<node_info_t> node_info(number_of_nodes);
 	initialize_node_info(node_info, use_cached, C, eps, max_iter);
 
 	// Find top k of unfavoured.
