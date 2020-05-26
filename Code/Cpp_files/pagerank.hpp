@@ -41,7 +41,7 @@ public:
 	pagerank_v get_lfprp_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
 			const int max_iter=100);
 	// LFPR Hybrid topk.
-	pagerank_V get_lfprh_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
+	pagerank_v get_lfprh_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
 			const int max_iter=100);
 
 

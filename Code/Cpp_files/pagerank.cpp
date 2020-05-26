@@ -951,6 +951,45 @@ pagerank_v pagerank_algorithms::get_lfprp_topk(const int k, const double C, cons
 	return pagerankv;
 }
 
+// LFPRN Hybrid.
+pagerank_v pagerank_algorithms::get_lfprh_topk(const int k, const double C, const bool use_cached, const double eps,
+		const int max_iter)
+{
+	// Take pagerank so as to know the importance of each node. 
+	pagerank_v pure_pagerank;
+	if (use_cached && is_cache_valid)
+		pure_pagerank = cached_pagerank;
+	else
+		pure_pagerank = get_pagerank(C, eps, max_iter);
+
+	int nnodes = g.get_num_nodes();
+	int ncommunities = g.get_num_communities();
+
+	// Find the category that is unfavoured by pagerank. Works only for binary categories.
+	double red_pagerank = g.get_pagerank_per_community(pure_pagerank)[1];
+	const int unfavoured_category = (red_pagerank < g.get_community_percentage(1)) ? 1 : 0;
+	// Sort pagerank vector so as to know the topk nodes.
+	sort_pagerank_vector(pure_pagerank);
+	// find top k of unfavoured kategory.
+	std::vector<int> topk_unfavoured(k);
+	int temp = 0;
+	int node_category;
+	// pure pagerank is sorted.
+	for (pagerank_t &node : pure_pagerank) {
+		node_category = g.get_community(node.node_id);
+
+		if (node_category == unfavoured_category) {
+			topk_unfavoured[k] = node.node_id;
+			temp++;
+		}
+		if (temp == k) break;
+	}
+
+	// Calculate the custom excess policy/vector.
+	
+
+}
+
 void pagerank_algorithms::set_personalization_type(personalization_t personalize_type, int extra_info)
 {
 	this->personalization_type = personalize_type;
