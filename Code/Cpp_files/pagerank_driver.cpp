@@ -284,6 +284,14 @@ int main(int argc, char **argv)
 		print_algo_info("lfpr proportional topk", out_summary, personalize_type, jump_prob, personalize_extra);
 		pagerankv = algs.get_lfprp_topk(k, 1 - jump_prob);
 		save_pagerank("lfpr_p_topk", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfpru hybrid topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprhu_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_hu_topk", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfprn hybrid topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprhn_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_hn_topk", pagerankv, g, algs, out_summary);
 	} else 
 	{
 		if (personalize_type == personalization_t::ATTRIBUTE_PERSONALIZATION)
