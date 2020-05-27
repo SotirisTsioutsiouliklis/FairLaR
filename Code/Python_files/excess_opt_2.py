@@ -1,3 +1,15 @@
+""" Gradient based optimization for the excess problem.
+It solves the other constractions by projection. Not very efficient.
+It also assumes that solution domain is convex so it is based only in
+good initial point.
+
+Because of the wrong assumptionof convexity we can not quarranty that
+the way we cope with constraint is proper.
+
+TODO:
+    i. Make independent of convexity.
+    ii. Think of possible ways to cope with  contstraints.
+"""
 import numpy as np 
 import sys
 import torch as torch

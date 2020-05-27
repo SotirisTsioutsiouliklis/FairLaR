@@ -1,3 +1,6 @@
+""" Gradient based optimization for excess problem.
+the base for the other two.
+"""
 import numpy as np 
 import sys
 import torch as torch
