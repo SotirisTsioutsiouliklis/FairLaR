@@ -1,3 +1,14 @@
+/**
+ * A simple stochastic algorithm for residual ptimization. Works good
+ * enough when we start from a good initial point (proporional or
+ * uniform - request prior knowledge.). Gives the options for initial
+ * point: proportional, uniform, random. Great disadvandage the fact that
+ * is based on the wrong theory that the solution domain is convex.
+ * It should have some kind of restart.
+ * 
+ * TODO:
+ *  i. Add restart. Solution's domain not convex.
+ */
 #include <fstream>
 #include "residual_stochastic_opt.hpp"
 #include <omp.h>
@@ -589,7 +600,7 @@ int main(int argc, char **argv) {
     time_file << total_time << "\t" << dir_srch_time << "\t" << loss_calc_time << "\t" << line_srch_time << std::endl;
     time_file.close();
 
-    // Tset print. You can ignore.
+    // Test print. You can ignore.
     //std::cout << "red ratio: " << g.get_pagerank_per_community(temp_fair_pagerank)[1];
 
     return 0;

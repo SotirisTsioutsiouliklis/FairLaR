@@ -1,3 +1,9 @@
+/**
+ * In general is a simple stochastic algorithm for local sensitive problem.
+ * Details:
+ *  i. Start point: Random, here we don't need anything special except
+ *          of giving the proper ratio to each category.
+ */
 #include <fstream>
 #include "local_optimization.hpp"
 #include <omp.h>
@@ -140,19 +146,6 @@ std::vector<double> get_random_initial_point(graph &g, double phi) {
             break;
         }
     }
-    //std::cout << "Initailized\n";
-    /*
-    double red_sum = 0;
-    double blue_sum = 0;
-    for (int i = 0; i < dimension; i++) {
-        if (g.get_community(i) == 1) {
-            red_sum += initial_point[i];
-        } else {
-            blue_sum += initial_point[i];
-        }
-    }
-    //std::cout << "Red ratio: " << red_sum << "blue ratio: " << blue_sum << "\n";
-    */
 
     return initial_point;
 }
@@ -333,19 +326,19 @@ int main(int argc, char **argv) {
     double phi;
     
     if (argc == 1) {
-		//std::cout << "Provide <phi: wanted ratio for category 1>";
+		std::cout << "Provide <phi: wanted ratio for category 1>";
         return 0;
 	} else if (argc == 2) {
         phi = std::atof(argv[1]);
     } else {
-		//std::cout << "Provide ONLY ONE ARGUMENT <phi: wanted ratio for category 1>";
+		std::cout << "Provide ONLY ONE ARGUMENT <phi: wanted ratio for category 1>";
         return 0;
     }
     
 
    
     graph g("out_graph.txt", "out_community.txt"); // Load graph.
-    if (phi == 0) phi = g.get_community_percentage(1);// ----------------------------------------------------------------------------------------------
+    if (phi == 0) phi = g.get_community_percentage(1);
     // Create phi file which is needed for personilized pagerank.
     std::ofstream phi_file;
     phi_file.open("out_phi.txt");
@@ -353,11 +346,8 @@ int main(int argc, char **argv) {
     phi_file << "1\t" << phi;
     phi_file.close();
 
-    //local_log_file.open("local_log_file.txt");
-    //local_log_file << "Start experiments with phi: " << phi << "\n";
     // Initializations.
     srand(time(NULL)); // Init randomly
-    //////std::cout << "read graph\n";
     g.load_community_percentage("out_phi.txt");
     pagerank_algorithms algs(g); // Init algoriths class.
     int number_of_nodes = g.get_num_nodes(); // Dimension of points.
@@ -379,15 +369,7 @@ int main(int argc, char **argv) {
     double temp_step;
     int whole_iterations = 0;
 restart:
-    //////std::cout << "get initial point\n";
     current_point = get_random_initial_point(g, phi);
-    //local_log_file << "Initial point: [";
-    //for (int l = 0; l < number_of_nodes; l++) {
-        //if (current_point[l] != 0) {
-            //local_log_file  << l << " : " << current_point[l] << "\n";
-        //}
-    //}
-    //local_log_file << "\n";
     algs.set_personalization_type(personalization_t::JUMP_OPT_PERSONALIZATION, current_point);
     current_pagerank = algs.get_local_fair_pagerank();
     iter++;
@@ -398,23 +380,16 @@ restart:
         best_point = current_point;
         best_loss_value = current_loss_function_value;
     }
-    
-    //local_log_file << "current loss value: " << current_loss_function_value << "\n";
-    //local_log_file << "best loss value: " << best_loss_value << "\n";  
-    //local_log_file << "Start iterations:\n";
+
     while (iter < FUNCTIONAL_CALCULATIONS) {
         whole_iterations++;
         std::cout << "New point\n";
-        //local_log_file << "Iteration: " << whole_iterations << "\n";
         
         if (restart_condition(best_loss_value, current_loss_function_value)) {
-            //local_log_file << "-------------------------------------------RESTART----------------------------------------\n";
             if (current_loss_function_value < best_loss_value) {
             best_point = current_point;
             best_loss_value = current_loss_function_value;
             }
-            //local_log_file << "current loss value: " << current_loss_function_value << "\n";
-            //local_log_file << "best loss value: " << best_loss_value << "\n";
             goto restart;
         }
         
@@ -431,26 +406,15 @@ restart:
             }
         }
         // Renew values.
-        //local_log_file << "End of direction searching.\nI was in point: [";
-        //local_log_file << "\n";
-        //local_log_file << "With loss value: " << current_loss_function_value << "\n";
         current_point = candidate_point;
         current_loss_function_value = candidate_loss_value;
-        //local_log_file << "I will go to point: [";
-        //local_log_file << "\n";
-        //local_log_file << "With loss value: " << current_loss_function_value << "\n";
-        //local_log_file << "Continue searching to improve new current point if i have functional calculations left\n"; 
     }
-    //local_log_file << "End of functional calculations - end of Searching.\n";
     // Renew values.
     if (current_loss_function_value < best_loss_value) {
         best_point = current_point;
         best_loss_value = current_loss_function_value;
     }
 
-    //local_log_file << "current loss value: " << current_loss_function_value << "\n";
-    //local_log_file << "best loss value: " << best_loss_value << "\n";
-    //local_log_file.close();
     algs.set_personalization_type(personalization_t::JUMP_OPT_PERSONALIZATION, best_point);
     temp_fair_pagerank = algs.get_local_fair_pagerank();
     save_results(temp_fair_pagerank, best_point);
