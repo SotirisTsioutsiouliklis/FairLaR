@@ -417,7 +417,7 @@ class Gradient_descent():
         now = local_start_time
         elapsed_time = now - local_start_time
         converge_file.write("%d\t%f\t%f\t%f\n" %(itera, elapsed_time, self.current_loss_value, real_loss))
-        while(torch.norm(gradient) > (10 ** (-4)) and itera < 200):
+        while(torch.norm(gradient) > (10 ** (-4)) and itera < 300):
             gradient = torch.cat(self.line_search())
             itera += 1
             print("iter: ", itera, ", loss: ", self.current_loss_value)
