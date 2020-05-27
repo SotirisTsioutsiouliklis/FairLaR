@@ -1,5 +1,5 @@
-#ifndef _local_jump_optimization_HPP
-#define _local_jump_optimization_HPP
+#ifndef _local_optimization_HPP
+#define _local_optimization_HPP
 
 #include <iostream>
 #include <math.h>
