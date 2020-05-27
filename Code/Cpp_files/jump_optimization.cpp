@@ -324,12 +324,12 @@ int main(int argc, char **argv) {
     double phi;
     
     if (argc == 1) {
-		//std::cout << "Provide <phi: wanted ratio for category 1>";
+		std::cout << "Provide <phi: wanted ratio for category 1>\n";
         return 0;
 	} else if (argc == 2) {
         phi = std::atof(argv[1]);
     } else {
-		//std::cout << "Provide ONLY ONE ARGUMENT <phi: wanted ratio for category 1>";
+		std::cout << "Provide ONLY ONE ARGUMENT <phi: wanted ratio for category 1>\n";
         return 0;
     }
     
