@@ -415,21 +415,21 @@ int main(int argc, char **argv) {
     omp_set_num_threads(20);
 
     // Initializations for time measures.
-    std::ofstream time_file;
-    std::ofstream converge_file;
+    //std::ofstream time_file;
+    //std::ofstream converge_file;
     // For total program.
-    std::chrono::time_point<std::chrono::high_resolution_clock> total_start_time, total_stop_time;
-    double total_time = 0;
+    //std::chrono::time_point<std::chrono::high_resolution_clock> total_start_time, total_stop_time;
+    //double total_time = 0;
     // For Converge.
-    std::chrono::time_point<std::chrono::high_resolution_clock> con_start_time, con_stop_time;
+    //std::chrono::time_point<std::chrono::high_resolution_clock> con_start_time, con_stop_time;
     // For line search.
-    std::chrono::time_point<std::chrono::high_resolution_clock> line_start_time, line_stop_time;
-    double dir_srch_time = 0;
+    //std::chrono::time_point<std::chrono::high_resolution_clock> line_start_time, line_stop_time;
+    //double dir_srch_time = 0;
     // For direction search.
-    std::chrono::time_point<std::chrono::high_resolution_clock> dir_start_time, dir_stop_time;
-    double line_srch_time = 0;
+    //std::chrono::time_point<std::chrono::high_resolution_clock> dir_start_time, dir_stop_time;
+    //double line_srch_time = 0;
     // Start total timer.
-    total_start_time = std::chrono::high_resolution_clock::now();
+    //total_start_time = std::chrono::high_resolution_clock::now();
 
     // Read Command line arguments.
     double phi;
@@ -475,7 +475,7 @@ int main(int argc, char **argv) {
     std::vector<double> temp_direction(number_of_nodes);
     pagerank_v current_pagerank;
     double current_loss_function_value;
-    double previous_loss_function_value; // For end condition that doesn't working properly. Fix me!!!
+    //double previous_loss_function_value; // For end condition that doesn't working properly. Fix me!!!
     double candidate_loss_value;
     double temp_loss_function_value;
     double temp_step;
@@ -490,18 +490,18 @@ int main(int argc, char **argv) {
     current_pagerank = algs.get_custom_step_fair_pagerank(current_point);
     current_loss_function_value = loss_function_at(pagerank, current_pagerank, number_of_nodes);
     candidate_loss_value = current_loss_function_value;
-    previous_loss_function_value = current_loss_function_value;
+    //previous_loss_function_value = current_loss_function_value;
 
     // Write in converge file.
-    std::string name = std::string("out_stochastic_converge_") + std::to_string(NUMBER_OF_DIRECTIONS) + std::string(".txt");
-    converge_file.open(name);
-    converge_file << "iter\ttime\t\tloss" << std::endl;
-    converge_file << std::fixed;
-    converge_file << std::setprecision(9);
-    con_start_time = std::chrono::high_resolution_clock::now();
-    con_stop_time = con_start_time;
-    elapsed_time = con_stop_time - con_start_time;
-    converge_file << whole_iterations << "\t" << elapsed_time.count() << "\t" << current_loss_function_value << std::endl;
+    //std::string name = std::string("out_stochastic_converge_") + std::to_string(NUMBER_OF_DIRECTIONS) + std::string(".txt");
+    //converge_file.open(name);
+    //converge_file << "iter\ttime\t\tloss" << std::endl;
+    //converge_file << std::fixed;
+    //converge_file << std::setprecision(9);
+    //con_start_time = std::chrono::high_resolution_clock::now();
+    //con_stop_time = con_start_time;
+    //elapsed_time = con_stop_time - con_start_time;
+    //converge_file << whole_iterations << "\t" << elapsed_time.count() << "\t" << current_loss_function_value << std::endl;
 
     // Start search iterations.
     while (whole_iterations < MAX_ITERATIONS) {
@@ -535,24 +535,24 @@ int main(int argc, char **argv) {
         for (int i = 0; i < NUMBER_OF_DIRECTIONS; i++) {
             //std::cout << "New direction\n";
             // Start time for direction searching.
-            dir_start_time = std::chrono::high_resolution_clock::now();
+            //dir_start_time = std::chrono::high_resolution_clock::now();
             // Get random direction.
             temp_direction = create_random_direction(current_point, g);
             // Stop time for direction searching.
-            dir_stop_time = std::chrono::high_resolution_clock::now();
+            //dir_stop_time = std::chrono::high_resolution_clock::now();
             // Renew duration for direction searching.
-            elapsed_time = dir_stop_time - dir_start_time;
-            dir_srch_time += elapsed_time.count();
+            //elapsed_time = dir_stop_time - dir_start_time;
+            //dir_srch_time += elapsed_time.count();
             // Start time for line search.
-            line_start_time = std::chrono::high_resolution_clock::now();
+            //line_start_time = std::chrono::high_resolution_clock::now();
             // Find feasible best step with bisection.
             // Renew temp_loss_function_value
             temp_step = find_max_step(algs, g, current_point, temp_direction, pagerank, temp_loss_function_value, current_loss_function_value);
             // Stop time for line search.
-            line_stop_time = std::chrono::high_resolution_clock::now();
+            //line_stop_time = std::chrono::high_resolution_clock::now();
             // Renew duration for line search.
-            elapsed_time = line_stop_time - line_start_time;
-            line_srch_time += elapsed_time.count();
+            //elapsed_time = line_stop_time - line_start_time;
+            //line_srch_time += elapsed_time.count();
             // Check if it is better than the current candidate point.
             if (temp_loss_function_value < candidate_loss_value) {
                 // If it is.
@@ -566,19 +566,19 @@ int main(int argc, char **argv) {
 
         // Renew values.
         current_point = candidate_point;
-        previous_loss_function_value = current_loss_function_value;
+        //previous_loss_function_value = current_loss_function_value;
         current_loss_function_value = candidate_loss_value;
         //std::cout << "loss------------------------->" << current_loss_function_value << std::endl;
 
         // Renew time interval.
-        con_stop_time = std::chrono::high_resolution_clock::now();
-        elapsed_time = con_stop_time - con_start_time;
+        //con_stop_time = std::chrono::high_resolution_clock::now();
+        //elapsed_time = con_stop_time - con_start_time;
 
         // Write in converge file.
-        converge_file << whole_iterations << "\t" << elapsed_time.count() << "\t" << current_loss_function_value << std::endl;
+        //converge_file << whole_iterations << "\t" << elapsed_time.count() << "\t" << current_loss_function_value << std::endl;
     }
     // Close convergence file file.
-    converge_file.close();
+    //converge_file.close();
 
     // Get best custom LFPR so far.
     temp_fair_pagerank = algs.get_custom_step_fair_pagerank(current_point);
@@ -587,18 +587,18 @@ int main(int argc, char **argv) {
     save_results(temp_fair_pagerank, current_point);
 
     // Calculate total time.
-    total_stop_time = std::chrono::high_resolution_clock::now();
-    elapsed_time = total_stop_time - total_start_time;
-    total_time = elapsed_time.count();
+    //total_stop_time = std::chrono::high_resolution_clock::now();
+    //elapsed_time = total_stop_time - total_start_time;
+    //total_time = elapsed_time.count();
 
     // Write in time file.
-    name = std::string("out_stochastic_timing_") + std::to_string(NUMBER_OF_DIRECTIONS) + std::string(".txt");
-    time_file.open(name);
-    time_file << "total\t\tdir_srch\tloss_calc\tline_srch\n";
-    time_file << std::fixed;
-    time_file << std::setprecision(9);
-    time_file << total_time << "\t" << dir_srch_time << "\t" << loss_calc_time << "\t" << line_srch_time << std::endl;
-    time_file.close();
+    //name = std::string("out_stochastic_timing_") + std::to_string(NUMBER_OF_DIRECTIONS) + std::string(".txt");
+    //time_file.open(name);
+    //time_file << "total\t\tdir_srch\tloss_calc\tline_srch\n";
+    //time_file << std::fixed;
+    //time_file << std::setprecision(9);
+    //time_file << total_time << "\t" << dir_srch_time << "\t" << loss_calc_time << "\t" << line_srch_time << std::endl;
+    //time_file.close();
 
     // Test print. You can ignore.
     //std::cout << "red ratio: " << g.get_pagerank_per_community(temp_fair_pagerank)[1];
