@@ -450,10 +450,10 @@ class Gradient_descent():
 
         #print("Sum of opt excess pagerank vector: ", np.sum(y))
         #print("Sum of excess vector: ", torch.sum(self.current_x_blue) + torch.sum(self.current_x_red))
-        with open("out_excess_sensitive_pagerank.txt", "w") as file_one:
+        with open("out_grad_excess_sensitive_pagerank.txt", "w") as file_one:
             for i in range(y_indx.size):
                 file_one.write("%f\n" %y_indx[i])
-        with open("out_excess_sensitive_policy_v.txt", "w") as file_one:
+        with open("out_grad_excess_sensitive_policy_v.txt", "w") as file_one:
             for i in range(exc_indx.size):
                 file_one.write("%f\n" %exc_indx[i])
 

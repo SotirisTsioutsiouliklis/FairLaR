@@ -16,8 +16,8 @@
 #include <iomanip>
 
 // Parameters
-int MAX_ITERATIONS = 1000;
-int NUMBER_OF_DIRECTIONS = 100;
+int MAX_ITERATIONS = 300;
+int NUMBER_OF_DIRECTIONS = 50;
 double PRECISION_OF_SOLUTION = pow(10, -8);
 double PRECISION_OF_CAT_RATIO = pow(10, -4);
 int TIMES_TO_TRY_FOR_INITIAL_POINT = 100;
@@ -533,7 +533,7 @@ int main(int argc, char **argv) {
         
         // Find the best direction and corresponding step.
         for (int i = 0; i < NUMBER_OF_DIRECTIONS; i++) {
-            std::cout << "New direction\n";
+            //std::cout << "New direction\n";
             // Start time for direction searching.
             dir_start_time = std::chrono::high_resolution_clock::now();
             // Get random direction.
