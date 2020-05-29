@@ -229,7 +229,7 @@ pagerank_v pagerank_algorithms::get_custom_step_fair_pagerank(std::vector<double
 			if (run_uniform)
 				my_leaked = leaked * g.get_community_percentage(comm) / g.get_community_size(comm);
 			else
-				my_leaked = leaked * g.get_community_percentage(comm) * node_info[node].importance_in_community;
+				my_leaked = leaked * g.get_community_percentage(comm) * custom_excess[node];
 			new_val = tmp_pagerank[node] + my_leaked + tmp_pagerank_jump[node];
 			diff += std::fabs(new_val - pagerankv[node].pagerank);
 			pagerankv[node].pagerank = new_val;
