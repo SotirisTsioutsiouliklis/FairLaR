@@ -7,6 +7,7 @@
 #include <vector>
 #include "graph.hpp"
 #include "pagerank.hpp"
+//#include <omp.h>
 
 static bool get_options(const int argc, char ** const argv, double &jump_prob,
 		std::string &personalize_filename, personalization_t &personalize_type,
@@ -247,6 +248,8 @@ static void print_algo_info(std::string algo_name, std::ofstream &out_summary,
 
 int main(int argc, char **argv)
 {
+	// Define number of threads to use.
+    //omp_set_num_threads(10);
 	double jump_prob;
 	std::string personalize_filename, comm_percentage_filename = "";
 	personalization_t personalize_type;
