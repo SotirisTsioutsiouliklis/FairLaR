@@ -269,9 +269,9 @@ class Gradient_descent():
         return distance 
 
     def get_loss_at(self, x_red, x_blue):
-        global real_loss
-        global loss_calc
-        loss_calc += 1
+        #global real_loss
+        #global loss_calc
+        #loss_calc += 1
         # Define other parameters than pl, deltas, pagerank.
         id_matrix = torch.tensor(np.identity(self.dimension))
         gama = 0.15
@@ -283,7 +283,7 @@ class Gradient_descent():
         y = gama * torch.matmul(self.jump_vector, torch.inverse(id_matrix - ((1 - gama) * excess_array)))
         # Define the loss.
         distance = torch.dist(y, self.pagerank, p=2)
-        real_loss = distance ** 2
+        #real_loss = distance ** 2
         #red_sums = l * torch.abs(torch.sum(x_red) - 1)
         red_sums = l * ((torch.sum(x_red) - 1) ** 2)
         #blue_sums =  l * torch.abs(torch.sum(x_blue) -  1)
@@ -305,19 +305,19 @@ class Gradient_descent():
         return x_red.grad, x_blue.grad
         
     def line_search(self):
-        global loss_time
-        global line_time
-        global dir_time
-        global start_time
-        global loss_calc
-        global time_file
-        global converge_file
+        #global loss_time
+        #global line_time
+        #global dir_time
+        #global start_time
+        #global loss_calc
+        #global time_file
+        #global converge_file
         self.current_loss_value = self.get_loss_at(self.current_x_red, self.current_x_blue)
-        dir_start = time.time()
+        #dir_start = time.time()
         red_direction, blue_direction = self.get_gradient()
-        dir_stop = time.time()
-        dir_elapsed = dir_stop - dir_start
-        dir_time += dir_elapsed
+        #dir_stop = time.time()
+        #dir_elapsed = dir_stop - dir_start
+        #dir_time += dir_elapsed
         red_direction = - red_direction
         blue_direction = - blue_direction
         
@@ -326,11 +326,11 @@ class Gradient_descent():
         step = 1
         temp_red = self.current_x_red + step * red_direction
         temp_blue = self.current_x_blue + step * blue_direction
-        loss_start = time.time()
+        #loss_start = time.time()
         temp_loss = self.get_loss_at(temp_red, temp_blue)
-        loss_stop = time.time()
-        loss_elapsed = loss_stop - loss_start
-        loss_time += loss_elapsed
+        #loss_stop = time.time()
+        #loss_elapsed = loss_stop - loss_start
+        #loss_time += loss_elapsed
         
         valide_values = True
         for i in temp_red:
@@ -345,12 +345,12 @@ class Gradient_descent():
             temp_red = self.current_x_red + step * red_direction
             temp_blue = self.current_x_blue + step * blue_direction
             if (step < (10 ** (-30))):
-                time_file = open("out_gradient_timing.txt", "a")
-                end_time = time.time()
-                elapsed_time = end_time - start_time
-                time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
-                time_file.close()
-                converge_file.close()
+                #time_file = open("out_gradient_timing.txt", "a")
+                #end_time = time.time()
+                #elapsed_time = end_time - start_time
+                #time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
+                #time_file.close()
+                #converge_file.close()
                 self.save_results(self.index)
                 sys.exit("step < 10 ^ (-30)")
             valide_values = True
@@ -366,19 +366,19 @@ class Gradient_descent():
             step = step / 2 # try * 9 / 10.
             temp_red = self.current_x_red + step * red_direction
             temp_blue = self.current_x_blue + step * blue_direction
-            loss_start = time.time()
+            #loss_start = time.time()
             temp_loss = self.get_loss_at(temp_red, temp_blue)
-            loss_stop = time.time()
-            loss_elapsed = loss_stop - loss_start
-            loss_time += loss_elapsed
+            #loss_stop = time.time()
+            #loss_elapsed = loss_stop - loss_start
+            #loss_time += loss_elapsed
             #print(temp_loss)
             if (step < (10 ** (-30))):
-                time_file = open("out_gradient_timing.txt", "a")
-                end_time = time.time()
-                elapsed_time = end_time - start_time
-                time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
-                time_file.close()
-                converge_file.close()
+                #time_file = open("out_gradient_timing.txt", "a")
+                #end_time = time.time()
+                #elapsed_time = end_time - start_time
+                #time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
+                #time_file.close()
+                #converge_file.close()
                 self.save_results(self.index)
                 sys.exit("step < 10 ^ (-10)--!")
         #print(temp_loss, self.)
@@ -390,42 +390,42 @@ class Gradient_descent():
         if temp_loss <= self.current_loss_value:
             self.current_loss_value = temp_loss
         else:
-            time_file = open("out_gradient_timing.txt", "a")
-            end_time = time.time()
-            elapsed_time = end_time - start_time
-            time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
-            time_file.close()
-            converge_file.close()
+            #time_file = open("out_gradient_timing.txt", "a")
+            #end_time = time.time()
+            #elapsed_time = end_time - start_time
+            #time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
+            #time_file.close()
+            #converge_file.close()
             self.save_results(self.index)
             sys.exit("New loss value greater than previous but this should not have happend")
         #print("test print|| Loss_value: ", self.current_loss_value, " Step: ", step, " real loss: ", self.get_dist_from_pagrank(self.current_x_red, self.current_x_blue) / 0.0011)
 
-        line_end = time.time()
-        line_time += line_end - line_start
+        #line_end = time.time()
+        #line_time += line_end - line_start
 
         return red_direction, blue_direction
 
     def optimize(self):
-        global converge_file
+        #global converge_file
         # self.init_current_points() || For different initialization than uniform.
         self.current_loss_value = self.get_loss_at(self.current_x_red, self.current_x_blue)
         gradient = torch.cat(self.get_gradient())
         #print("test print|| Loss_value: ", self.current_loss_value, " real loss: ", self.get_dist_from_pagrank(self.current_x_red, self.current_x_blue) / 0.0011)
 
         itera = 0
-        local_start_time = time.time()
-        now = local_start_time
-        elapsed_time = now - local_start_time
-        converge_file.write("%d\t%f\t%f\t%f\n" %(itera, elapsed_time, self.current_loss_value, real_loss))
+        #local_start_time = time.time()
+        #now = local_start_time
+        #elapsed_time = now - local_start_time
+        #converge_file.write("%d\t%f\t%f\t%f\n" %(itera, elapsed_time, self.current_loss_value, real_loss))
         while(torch.norm(gradient) > (10 ** (-4)) and itera < 300):
             gradient = torch.cat(self.line_search())
             itera += 1
             print("iter: ", itera, ", loss: ", self.current_loss_value)
             if itera % 10 == 0:
                 self.save_results(self.index)
-            now = time.time()
-            elapsed_time = now - local_start_time
-            converge_file.write("%d\t%f\t%f\t%f\n" %(itera, elapsed_time, self.current_loss_value, real_loss))
+            #now = time.time()
+            #elapsed_time = now - local_start_time
+            #converge_file.write("%d\t%f\t%f\t%f\n" %(itera, elapsed_time, self.current_loss_value, real_loss))
 
         self.save_results(self.index)
         print("Sum of excess vector: ", torch.sum(self.current_x_blue) + torch.sum(self.current_x_red))
@@ -459,16 +459,16 @@ class Gradient_descent():
 
 #-------------------------------------------------- MAIN ---------------------------------------------------#
 # Log files.
-loss_calc = 0
-real_loss = 0.
-loss_time = 0.
-dir_time = 0.
-line_time = 0.
-time_file = open("out_gradient_timing.txt", "w")
-time_file.write("total\t\tloss\t\tdir\t\tline_search\n")
-time_file.close()
-converge_file = open("out_gradient_converge.txt", "w")
-converge_file.write("iter\ttime\t\tloss\t\treal_loss\n")
+#loss_calc = 0
+#real_loss = 0.
+#loss_time = 0.
+#dir_time = 0.
+#line_time = 0.
+#time_file = open("out_gradient_timing.txt", "w")
+#time_file.write("total\t\tloss\t\tdir\t\tline_search\n")
+#time_file.close()
+#converge_file = open("out_gradient_converge.txt", "w")
+#converge_file.write("iter\ttime\t\tloss\t\treal_loss\n")
 
 # define phi.
 if len(sys.argv) != 2:
@@ -477,7 +477,7 @@ else:
     PHI = float(sys.argv[1])
 
 # Start timer.
-start_time = time.time() # In seconds.
+#start_time = time.time() # In seconds.
 # Get pagerank.
 M,index = create_adj_matrix()
 pagerank_vector = uniformPR(M)
@@ -516,13 +516,13 @@ opt.init_points_by_vec(vec, index)
 
 
 opt.optimize()
-end_time = time.time()
-converge_file.close()
+#end_time = time.time()
+#converge_file.close()
 opt.save_results(index)
-time_file = open("out_gradient_timing.txt", "a")
-elapsed_time = end_time - start_time
-time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
-time_file.close()
+#time_file = open("out_gradient_timing.txt", "a")
+#elapsed_time = end_time - start_time
+#time_file.write("%f\t%f(%d)\t%f\t%f\n" %(elapsed_time, loss_time, loss_calc, dir_time, line_time))
+#time_file.close()
 print("normally terminated")
 
 
