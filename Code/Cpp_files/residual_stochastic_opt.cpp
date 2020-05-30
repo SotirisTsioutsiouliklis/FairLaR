@@ -16,8 +16,8 @@
 #include <iomanip>
 
 // Parameters
-int MAX_ITERATIONS = 300;
-int NUMBER_OF_DIRECTIONS = 100;
+int MAX_ITERATIONS = 100;
+int NUMBER_OF_DIRECTIONS = 20;
 double PRECISION_OF_SOLUTION = pow(10, -8);
 double PRECISION_OF_CAT_RATIO = pow(10, -4);
 int TIMES_TO_TRY_FOR_INITIAL_POINT = 100;
@@ -412,7 +412,7 @@ bool end_condition(double previous_value, double current_value) {
 
 int main(int argc, char **argv) {
     // Define number of threads to use.
-    omp_set_num_threads(20);
+    //omp_set_num_threads(20);
 
     // Initializations for time measures.
     //std::ofstream time_file;
@@ -483,7 +483,7 @@ int main(int argc, char **argv) {
 
     // Initialize start point.
     //current_point = algs.get_proportional_excess_vector();
-    current_point = get_uniform_initial_point();
+    current_point = get_uniform_initial_point(g);
     //current_point = get_random_initial_point();
 
     // Get custom LFPR.
