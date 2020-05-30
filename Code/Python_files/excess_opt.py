@@ -513,7 +513,16 @@ vec = np.zeros(g.no_of_nodes)
 for i in range(g.no_of_nodes):
     vec[i] = g.nodes[i].import_in_com
 opt.init_points_by_vec(vec, index)
-
+# Start from Uniform.
+#vec = np.zeros(g.no_of_nodes)
+#red_nodes = np.sum(g.node_communities)
+#blue_nodes = g.no_of_nodes - red_nodes
+#for i in range(g.no_of_nodes):
+#    if g.node_communities[i] == 0:
+#        vec[i] = 1 / blue_nodes
+#    else:
+#        vec[i] = 1 / red_nodes
+#opt.init_points_by_vec(vec, index)
 
 opt.optimize()
 #end_time = time.time()

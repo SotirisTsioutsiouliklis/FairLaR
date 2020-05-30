@@ -1,12 +1,13 @@
 import subprocess
 
-small_datasets = ["books", "blogs", "dblp_course", "twitter", "physics"]
+small_datasets = ["books", "blogs", "dblp_course", "twitter"]
 
-big_datasets = ["dblp_aminer", "pokec", "linkedin"]
+big_datasets = ["dblp_aminer", "pokec", "linkedin", "physics"]
 
-phis = [0, 0.5, 0.3, 0.7] 
+small_phis = [0.5]
+big_phis = [0, 0.5] 
 
-for phi in phis:
+for phi in small_phis:
     # Create the phi folder.
     subprocess.call("mkdir phi_%.2f" %phi, cwd=".", shell=True)
     for d in small_datasets:
@@ -23,7 +24,7 @@ for phi in phis:
         subprocess.call("./pagerank.out -c out_phi.txt", cwd="phi_%.2f/%s" %(phi, d), shell=True)
         subprocess.call("python3 excess_opt.py %.2f" %phi, cwd="phi_%.2f/%s" %(phi, d), shell=True)
 
-for phi in phis:
+for phi in big_phis:
     # Create the phi folder.
     subprocess.call("mkdir big_phi_%.2f" %phi, cwd=".", shell=True)
     for d in big_datasets:
