@@ -23,7 +23,7 @@ for phi in small_phis:
         subprocess.call("./residual_optimization.out %.2f" %phi, cwd="phi_%.2f/%s" %(phi, d), shell=True)
         subprocess.call("./pagerank.out -c out_phi.txt", cwd="phi_%.2f/%s" %(phi, d), shell=True)
         subprocess.call("python3 excess_opt.py %.2f" %phi, cwd="phi_%.2f/%s" %(phi, d), shell=True)
-
+"""
 for phi in big_phis:
     # Create the phi folder.
     subprocess.call("mkdir big_phi_%.2f" %phi, cwd=".", shell=True)
@@ -40,4 +40,4 @@ for phi in big_phis:
         subprocess.call("./residual_optimization.out %.2f" %phi, cwd="big_phi_%.2f/%s" %(phi, d), shell=True)
         subprocess.call("./pagerank.out -c out_phi.txt", cwd="big_phi_%.2f/%s" %(phi, d), shell=True)
         #subprocess.call("python3 excess_opt.py %.2f" %phi, cwd="big_phi_%.2f/%s" %(phi, d), shell=True)
-
+"""

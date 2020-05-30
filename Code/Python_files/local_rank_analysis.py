@@ -485,4 +485,5 @@ def top_dif_analysis():
                 file_one.write("%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%d\n" %(i, dif_vectors[algo][i], g.get_community_of_node(i), g.nodes[i].in_red_ratio, g.nodes[i].out_red_ratio,
                                             g.nodes[i].excess_to_red, g.nodes[i].excess_to_blue, avrg_red_ratio, pgrnk_pos))
     """
+
 top_dif_analysis()

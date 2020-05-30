@@ -2,12 +2,12 @@ import subprocess
 
 datasets = ["books", "blogs", "dblp_course", "twitter", "physics", "dblp_aminer", "pokec", "linkedin"]
 
-phis = [0, 0.5, 0.3, 0.7]
+phis = [0, 0.5]
 
 for phi in phis:
     # Create phi file.
     with open("out_phi.txt", "w") as file_one:
-        file_one.write("0 %.2f" %(1-phi))
+        file_one.write("0 %.2f\n" %(1-phi))
         file_one.write("1 %.2f" %phi)
     # Create the phi folder.
     subprocess.call("mkdir phi_%.2f" %phi, cwd=".", shell=True)
