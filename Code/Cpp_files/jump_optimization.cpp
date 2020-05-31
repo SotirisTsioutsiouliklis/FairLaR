@@ -85,7 +85,7 @@ bool is_probability_vector(std::vector<double> &point) {
     return true;
 }
 
-// returns current_point + step_direction
+// returns current_point + step_direction.
 void get_candidate_point(std::vector<double> &current_point, std::vector<double> &step_direction, std::vector<double> &point, int dimension) {
     for (int i = 0; i < dimension; i++) {
         point[i] = current_point[i] + step_direction[i];
@@ -155,6 +155,38 @@ std::vector<double> get_random_initial_point(pagerank_algorithms &algs, graph &g
 
     return initial_point;
 }
+
+// Returns a jump vector.
+std::vector<double> get_uniform_fair_point(pagerank_algorithms &algs, graph &g, double phi) {
+    int dimension = g.get_num_nodes();
+    std::vector<double> initial_point(dimension, 0);
+
+    // Get All red personilized ratios.
+    pagerank_v red_ratios = g.get_red_abs_prob();
+
+    // Find average red ratio for each community. Binary Only.
+    double red_ratios[2] = {0., 0.};
+
+    for (pagerank_t i : red_ratios) {
+        if (g.get_community(i.node_id) == 0) {
+            red_ratios[0] += i.pagerank;
+        } else {
+            red_ratios[1] += i.pagerank;
+        }
+    }
+
+    red_ratios[0] /= (float)g.get_community_size(0);
+    red_ratios[1] /= (float)g.get_community_size(1);
+
+    // Find Coefficents for each community.
+    if ((red_ratios[0] - red_ratios[1]) * (phi - red_ratios[1]) <= 0) {
+        std::cout << "Solution one doesn't work\n";
+        sys.exit(0);
+    }
+
+    return initial_point;
+}
+
 
 // Returns valide direction.
 std::vector<double> create_random_direction(std::vector<double> &current_point, int dimension) {
@@ -376,7 +408,8 @@ int main(int argc, char **argv) {
     double temp_step;
     int whole_iterations = 0;
 restart:
-    current_point = get_random_initial_point(algs, g, phi);
+    //current_point = get_random_initial_point(algs, g, phi);
+    current_point = get_uniform_fair_point(algs, g, phi);
     algs.set_personalization_type(personalization_t::JUMP_OPT_PERSONALIZATION, current_point);
     current_pagerank = algs.get_pagerank();
     iter++;

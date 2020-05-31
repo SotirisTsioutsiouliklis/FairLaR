@@ -45,6 +45,8 @@ public:
 			const int max_iter=100);
 	pagerank_v get_lfprhn_topk(const int k, const double C=0.85, const bool use_cached=true, const double eps=1e-4,
 			const int max_iter=100);
+	// Personilized pagerank to Red for all nodes.
+	pagerank_v get_red_abs_prob(const double C=0.85, const double eps=1e-4, const int max_iter=100);
 
 	void set_personalization_type(personalization_t personalize_type, int extra_info);
 	void set_personalization_type(personalization_t personalize_type, std::vector<double> &jump_vector);

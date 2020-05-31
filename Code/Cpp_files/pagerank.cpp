@@ -1326,3 +1326,55 @@ std::vector<double> pagerank_algorithms::get_hybrid_policy(const int k, const do
 
 	return custom_excess;
 }
+
+// ------------------------- From FairRec ------------------------------
+// Get absoribing probabilities to red nodes.
+pagerank_v pagerank_algorithms::get_red_abs_prob(const double C, const double eps, const int max_iter)
+{
+	// initialize
+	const unsigned int nnodes = g.get_num_nodes();
+	pagerank_v pagerankv(nnodes);
+	unsigned int i, node;
+	for (i = 0; i < nnodes; ++i) {
+		pagerankv[i].node_id = i;
+		pagerankv[i].pagerank = (g.get_community(i)) ? (1-C) : 0;
+	}
+
+	// Compute Red personilized for each node.
+	std::vector<double> tmp_pagerank(nnodes);
+	int iter = 0;
+	for (; iter < max_iter; ++iter) {
+		for (node = 0; node < nnodes; ++node) {
+			tmp_pagerank[node] = 0.0;
+			int n_out_degree = g.get_out_degree(node);
+			if (n_out_degree > 0) {
+				std::cout << "Not ready yet\n";
+				/*
+				for (const int &neighbor : g.get_out_neighbors(node)) {
+					tmp_pagerank[node] += pagerankv[neighbor].pagerank / n_out_degree;
+				}
+				*/
+			} else {
+				for (i = 0; i < nnodes; i++) {
+					tmp_pagerank[node] += pagerankv[i].pagerank / nnodes;
+				}
+			}
+			tmp_pagerank[node] *= C;
+			tmp_pagerank[node] += g.get_community(node) ? (1-C) : 0;
+		}
+		
+		// Check convergence.
+		double diff = 0.0;
+		for (node = 0; node < nnodes; ++node) {
+			diff += std::fabs(tmp_pagerank[node] - pagerankv[node].pagerank);
+			pagerankv[node].pagerank = tmp_pagerank[node];
+		}
+
+		if (diff < eps) break;
+	}
+
+	if (iter == max_iter)
+		std::cerr << "[WARN]: Pagerank algorithm reached " << max_iter << " iterations." << std::endl;
+	
+	return pagerankv;
+}
