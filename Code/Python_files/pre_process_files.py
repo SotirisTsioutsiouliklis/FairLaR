@@ -57,7 +57,35 @@ def remove_double_edges():
         file_one.write("%d\n" %n_nodes)
         for edge in edge_list:
             file_one.write("%d\t%d\n" %(edge[0], edge[1]))
-            
+     
+def change_categories():
+    """ Exchange Categories so as 1 to be the unfavoured.
+
+    Edge file should be name "out_graph.txt". The first row
+    is the number of the total nodes in tha graph. Each of the
+    next rows describes a directed edge from source node to
+    target node. The form is <int> <int> or <int>\t<int>
+
+    """
+    # Edge list, set for no dublicates.
+    cat_list = set()
+    n_com = 0
+
+    with open("out_community.txt", "r") as file_one:
+        # Read number of nodes. 
+        n_com = int(file_one.readline())
+        # For every line.
+        for line in file_one:
+            # Read edge.
+            edge = line.split()
+            # Add edge to edge_list.
+            cat_list.add((int(edge[0]), 1 - int(edge[1])))
+
+    with open("out_community.txt", "w") as file_one:
+        file_one.write("%d\n" %n_com)
+        for cat in cat_list:
+            file_one.write("%d\t%d\n" %(cat[0], cat[1]))
+
 def clean_dataset():
     """ Clean a dataset so as to follow the contracts for our algorithms.
 
