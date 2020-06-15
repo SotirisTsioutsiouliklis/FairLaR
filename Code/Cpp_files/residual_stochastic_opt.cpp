@@ -16,7 +16,7 @@
 #include <iomanip>
 
 // Parameters
-int MAX_ITERATIONS = 50;
+int MAX_ITERATIONS = 10;
 int NUMBER_OF_DIRECTIONS = 10;
 double PRECISION_OF_SOLUTION = pow(10, -8);
 double PRECISION_OF_CAT_RATIO = pow(10, -4);
