@@ -3,7 +3,7 @@
 It solves the targeted optimization problem as described
 in "Fairness-Aware Link Analysis"[1] paper but for the topk of the
 pagerank algorithm. It also preserve the order of these nodes compare
-to simpletargeted. Makes use of cvx optimization package[2].
+to simple targeted. Makes use of cvx optimization package[2].
 
 Parameters:
     phi (float): Wanted ratio for the protected category

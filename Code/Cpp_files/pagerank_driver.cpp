@@ -7,6 +7,7 @@
 #include <vector>
 #include "graph.hpp"
 #include "pagerank.hpp"
+//#include <omp.h>
 
 static bool get_options(const int argc, char ** const argv, double &jump_prob,
 		std::string &personalize_filename, personalization_t &personalize_type,
@@ -118,22 +119,24 @@ static void save_pagerank(std::string filename_prefix, pagerank_v &pagerankv, gr
 {
 	bool is_local = (filename_prefix == "local");
 	bool is_pagerank = (filename_prefix == "pagerank");
-	std::ofstream outfile_rank;
-	outfile_rank.open("out_" + filename_prefix + "_rank.txt");
+	//std::ofstream outfile_rank;
+	//outfile_rank.open("out_" + filename_prefix + "_rank.txt");
 	//std::ofstream outfile_pro_pos;
 	//outfile_pro_pos.open("out_" + filename_prefix + "_pos.txt");
 	std::ofstream outfile_pagerank;
 	outfile_pagerank.open("out_" + filename_prefix + "_pagerank.txt");
+	for (const auto &node : pagerankv) {
+		outfile_pagerank << node.pagerank << std::endl;
+	}
+	
 	//std::ofstream outfile_label_ranking;
 	////outfile_label_ranking.open("out_" + filename_prefix + "_label_ranking.txt");
 	//std::ofstream outfile_sums;
 	//outfile_sums.open("out_" + filename_prefix + "_sums.txt");
-	std::ofstream outfile_sums_perc;
-	outfile_sums_perc.open("out_" + filename_prefix + "_sums_prec.txt");
+	//std::ofstream outfile_sums_perc;
+	//outfile_sums_perc.open("out_" + filename_prefix + "_sums_prec.txt");
 
-	for (const auto &node : pagerankv) {
-		outfile_pagerank << node.pagerank << std::endl;
-	}
+	
 
 	algs.sort_pagerank_vector(pagerankv);
 
@@ -141,16 +144,16 @@ static void save_pagerank(std::string filename_prefix, pagerank_v &pagerankv, gr
 		//if (g.get_community(node) == 1)
 			//outfile_pro_pos << node << std::endl;
 
-	outfile_rank << std::fixed;
-	outfile_rank << std::setprecision(9);
-	outfile_rank << "# node\tpagerank\tcommunity" << get_local_header(is_local) << std::endl;
+	//outfile_rank << std::fixed;
+	//outfile_rank << std::setprecision(9);
+	//outfile_rank << "# node\tpagerank\tcommunity" << get_local_header(is_local) << std::endl;
 
 	//outfile_sums << std::fixed;
 	//outfile_sums << std::setprecision(9);
 	//outfile_sums << "# range\t\tcommunity_0\tcommunity_1\tcommunity_i..." << std::endl;
-	outfile_sums_perc << std::fixed;
-	outfile_sums_perc << std::setprecision(9);
-	outfile_sums_perc << "# range\t\tcommunity_0\tcommunity_1\tcommunity_i..." << std::endl;
+	//outfile_sums_perc << std::fixed;
+	//outfile_sums_perc << std::setprecision(9);
+	//outfile_sums_perc << "# range\t\tcommunity_0\tcommunity_1\tcommunity_i..." << std::endl;
 
 	std::vector<double> pagerank_sum(g.get_num_communities());
 	double sum_pagerank = 0.0; // sum of pagerank for all communities so far
@@ -160,33 +163,33 @@ static void save_pagerank(std::string filename_prefix, pagerank_v &pagerankv, gr
 		const auto &node = pagerankv[i];
 		pagerank_sum[g.get_community(node.node_id)] += node.pagerank;
 		sum_pagerank += pagerankv[i].pagerank;
-		outfile_rank << node.node_id << "\t" << node.pagerank << "\t" << g.get_community(node.node_id)
-			<< get_local_neighbors(is_local, node.node_id, g) << std::endl;
+		//outfile_rank << node.node_id << "\t" << node.pagerank << "\t" << g.get_community(node.node_id)
+		//	<< get_local_neighbors(is_local, node.node_id, g) << std::endl;
 		//outfile_label_ranking << g.get_community(node.node_id) << std::endl;
 		if ((i > 0) && ((i + 1) % 10 == 0))
 		{
 			//outfile_sums << "1-" << i + 1 << "\t";
-			outfile_sums_perc << "1-" << i + 1 << "\t";
+			//outfile_sums_perc << "1-" << i + 1 << "\t";
 			for (int community = 0; community < g.get_num_communities(); ++community)
 			{
 				//outfile_sums << "\t" << pagerank_sum[community];
-				outfile_sums_perc << "\t" << pagerank_sum[community] / sum_pagerank;
+				//outfile_sums_perc << "\t" << pagerank_sum[community] / sum_pagerank;
 			}
 			//outfile_sums << std::endl;
-			outfile_sums_perc << std::endl;
+			//outfile_sums_perc << std::endl;
 		}
 	}
 	if (g.get_num_nodes() % 10 != 0)
 	{
 		//outfile_sums << "1-" << i;
-		outfile_sums_perc << "1-" << i;
+		//outfile_sums_perc << "1-" << i;
 		for (int community = 0; community < g.get_num_communities(); ++community)
 		{
 			//outfile_sums << "\t" << pagerank_sum[community];
-			outfile_sums_perc << "\t" << pagerank_sum[community] / sum_pagerank;
+			//outfile_sums_perc << "\t" << pagerank_sum[community] / sum_pagerank;
 		}
 		//outfile_sums << std::endl;
-		outfile_sums_perc << std::endl;
+		//outfile_sums_perc << std::endl;
 	}
 
 	for (int community = 0; community < g.get_num_communities(); ++community)
@@ -195,12 +198,12 @@ static void save_pagerank(std::string filename_prefix, pagerank_v &pagerankv, gr
 		out_summary << "Community: " << community << ", Pagerank: " << pagerank_sum[community] << std::endl;
 	}
 
-	outfile_rank.close();
+	//outfile_rank.close();
 	//outfile_pro_pos.close();
 	outfile_pagerank.close();
 	//outfile_label_ranking.close();
 	//outfile_sums.close();
-	outfile_sums_perc.close();
+	//outfile_sums_perc.close();
 
 	algs.save_local_metrics(filename_prefix, pagerankv, is_pagerank);
 }
@@ -245,6 +248,8 @@ static void print_algo_info(std::string algo_name, std::ofstream &out_summary,
 
 int main(int argc, char **argv)
 {
+	// Define number of threads to use.
+    //omp_set_num_threads(10);
 	double jump_prob;
 	std::string personalize_filename, comm_percentage_filename = "";
 	personalization_t personalize_type;
@@ -284,6 +289,14 @@ int main(int argc, char **argv)
 		print_algo_info("lfpr proportional topk", out_summary, personalize_type, jump_prob, personalize_extra);
 		pagerankv = algs.get_lfprp_topk(k, 1 - jump_prob);
 		save_pagerank("lfpr_p_topk", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfpru hybrid topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprhu_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_hu_topk", pagerankv, g, algs, out_summary);
+
+		print_algo_info("lfprn hybrid topk", out_summary, personalize_type, jump_prob, personalize_extra);
+		pagerankv = algs.get_lfprhn_topk(k, 1 - jump_prob);
+		save_pagerank("lfpr_hn_topk", pagerankv, g, algs, out_summary);
 	} else 
 	{
 		if (personalize_type == personalization_t::ATTRIBUTE_PERSONALIZATION)

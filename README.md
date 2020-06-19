@@ -11,6 +11,9 @@ This repository has been created to distribute freely our implementations of the
 ### Dependencies:<br/>
 - Python 3.
 - C++ 11.
+- Optional Compiler that supports openmmp.
+
+    **Note:** make file is for gcc with openmp.
 
 All the experiments were made in linux Ubuntu. To compile cpp we used gcc compiler.
 
