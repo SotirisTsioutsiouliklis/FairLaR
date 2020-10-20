@@ -16,8 +16,8 @@
 #include <iomanip>
 
 // Parameters
-int MAX_ITERATIONS = 10;
-int NUMBER_OF_DIRECTIONS = 10;
+int MAX_ITERATIONS = 30;
+int NUMBER_OF_DIRECTIONS = 30;
 double PRECISION_OF_SOLUTION = pow(10, -8);
 double PRECISION_OF_CAT_RATIO = pow(10, -4);
 int TIMES_TO_TRY_FOR_INITIAL_POINT = 100;
@@ -482,8 +482,8 @@ int main(int argc, char **argv) {
     int whole_iterations = 0;
 
     // Initialize start point.
-    current_point = algs.get_proportional_excess_vector();
-    //current_point = get_uniform_initial_point(g);
+    // current_point = algs.get_proportional_excess_vector();
+    current_point = get_uniform_initial_point(g);
     //current_point = get_random_initial_point();
 
     // Get custom LFPR.

@@ -9,6 +9,25 @@
 #include "pagerank.hpp"
 #include <stdlib.h>
 
+void read_from_file(pagerank_v &pure_pagerank, int &kn) {
+	int node, i;
+
+	// Read nodes from file.
+	std::ifstream file("targeted_set.txt");
+
+	// Use a while loop together with the getline() function to read the file line by line
+	i = 0;
+	while (file >> node) {
+	// Output the text from the file
+	pure_pagerank[i].node_id = node;
+	i++;
+	}
+	kn = i;
+
+	// Close the file
+	file.close();
+}
+
 pagerank_algorithms::pagerank_algorithms(graph &g) : g(g), is_cache_valid(false)
 {
 	// nothing to do here
@@ -490,6 +509,10 @@ pagerank_v pagerank_algorithms::get_lfprn_topk(const int k, const double C, cons
 
 	// Sort pagerank vector so as to know the topk nodes.
 	sort_pagerank_vector(pure_pagerank);
+	// Must change pure_pagerank vector.
+	int kn;
+	read_from_file(pure_pagerank, kn);
+
 	// Separate into their category.
 	std::vector<int> topk_red;
 	std::vector<int> topk_blue;
@@ -497,7 +520,7 @@ pagerank_v pagerank_algorithms::get_lfprn_topk(const int k, const double C, cons
 	std::vector<bool> cat_at_topk(ncommunities, false); // Vector to check if there is at least one member of every community in topk.
 	std::vector<node_topk> node_info_for_topk(nnodes); // Vector to store informations for topk algorithms.
 	// Check of given K. cat_at_topk[i] == true if exists a member of category i in the topk by pagerank.
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < kn; i++)
 	{
 		int comm = g.get_community(pure_pagerank[i].node_id);
 		cat_at_topk[comm] = true;
@@ -517,7 +540,7 @@ pagerank_v pagerank_algorithms::get_lfprn_topk(const int k, const double C, cons
 	// If given K is not fissible, find the smallest fissible K.
 	if (!valide_k)
 	{
-		for (int i = k; i < nnodes; i++)
+		for (int i = kn; i < nnodes; i++)
 		{
 			cat_at_topk[g.get_community(pure_pagerank[i].node_id)] = true;
 			bool valide_k = true; // K is valide if exists at least one of each category.
@@ -532,6 +555,7 @@ pagerank_v pagerank_algorithms::get_lfprn_topk(const int k, const double C, cons
 			}		
 		}
 	}
+
 
 	// So k is fissible.
 	// Init extra infos for topk.
@@ -645,6 +669,9 @@ pagerank_v pagerank_algorithms::get_lfpru_topk(const int k, const double C, cons
 
 	// Sort pagerank vector so as to know the topk nodes.
 	sort_pagerank_vector(pure_pagerank);
+	int kn;
+	read_from_file(pure_pagerank, kn);
+
 	// Separate into their category.
 	std::vector<int> topk_red;
 	std::vector<int> topk_blue;
@@ -652,7 +679,7 @@ pagerank_v pagerank_algorithms::get_lfpru_topk(const int k, const double C, cons
 	std::vector<bool> cat_at_topk(ncommunities, false); // Vector to check if there is at least one member of every community in topk.
 	std::vector<node_topk> node_info_for_topk(nnodes); // Vector to store informations for topk algorithms.
 	// Check of given K. cat_at_topk[i] == true if exists a member of category i in the topk by pagerank.
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < kn; i++)
 	{
 		int comm = g.get_community(pure_pagerank[i].node_id);
 		cat_at_topk[comm] = true;
@@ -672,7 +699,7 @@ pagerank_v pagerank_algorithms::get_lfpru_topk(const int k, const double C, cons
 	// If given K is not fissible, find the smallest fissible K.
 	if (!valide_k)
 	{
-		for (int i = k; i < nnodes; i++)
+		for (int i = kn; i < nnodes; i++)
 		{
 			cat_at_topk[g.get_community(pure_pagerank[i].node_id)] = true;
 			bool valide_k = true; // K is valide if exists at least one of each category.
@@ -794,6 +821,8 @@ pagerank_v pagerank_algorithms::get_lfprp_topk(const int k, const double C, cons
 
 	// Sort pagerank vector so as to know the topk nodes.
 	sort_pagerank_vector(pure_pagerank);
+	int kn;
+	read_from_file(pure_pagerank, kn);
 
 	// Separate into their category.
 	std::vector<int> topk_red;
@@ -804,7 +833,7 @@ pagerank_v pagerank_algorithms::get_lfprp_topk(const int k, const double C, cons
 	std::vector<bool> cat_at_topk(ncommunities, false); // Vector to check if there is at least one member of every community in topk.
 	std::vector<node_topk> node_info_for_topk(nnodes); // Vector to store informations for nodes for topk algorithms.
 	
-	for (int i = 0; i < k; i++)
+	for (int i = 0; i < kn; i++)
 	{
 		int comm = g.get_community(pure_pagerank[i].node_id);
 		cat_at_topk[comm] = true;
@@ -825,7 +854,7 @@ pagerank_v pagerank_algorithms::get_lfprp_topk(const int k, const double C, cons
 	// If given K is not fissible, find the smallest fissible K.
 	if (!valide_k)
 	{
-		for (int i = k; i < nnodes; i++)
+		for (int i = kn; i < nnodes; i++)
 		{
 			cat_at_topk[g.get_community(pure_pagerank[i].node_id)] = true;
 			bool valide_k = true; // K is valide if exists at least one of each category.
@@ -976,6 +1005,7 @@ pagerank_v pagerank_algorithms::get_lfprhn_topk(const int k, const double C, con
 	int unfavoured_category = (g.get_community_percentage(1) > red_pagerank) ? 1 : 0;
 	std::vector<int> unfavoured_nodes_topk(k);
 	sort_pagerank_vector(pagerankv);
+
 	int temp = 0;
 
 	for (pagerank_t node : pagerankv) {
