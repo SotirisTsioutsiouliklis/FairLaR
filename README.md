@@ -138,7 +138,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 ## Personalized fairness distribution.
 
-![personalized distributions](https://github.com/SotirisTsioutsiouliklis/FairLaR/blob/master/img/datasets_header.jpg)
+![personalized distributions](https://anonymous.4open.science/repository/13016dbf-3516-497e-9788-d0bb06150b51/img/datasets_header.jpg)
 
 TODO:
 -----
