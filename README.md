@@ -2,7 +2,7 @@
 Fairness-Aware Link Analysis
 
 <!--![Datasets feture image](/img/datasets_header.jpg)<br/>-->
-![Datasets feture image](https://blog.karsens.com/content/images/size/w2000/2019/05/networkexpl.jpg)<br/>
+![Datasets feature image](https://iili.io/Fw0tZg.jpg)<br/>
 
 General Informations.
 ---------------------
@@ -138,7 +138,7 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
 ## Personalized fairness distribution.
 
-Relevant plot can be found [here](https://github.com/SotirisTsioutsiouliklis/FairLaR/blob/master/img/rest_real_violinplots.pdf)
+![Personalized fairness distribution](https://iili.io/Fw1Ktn.png)
 
 TODO:
 -----
