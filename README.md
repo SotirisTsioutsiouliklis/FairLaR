@@ -134,6 +134,12 @@ In the datasets provided we have done the forth mentioned preprocessing. In case
 
     A political retweet graph from "Ryan A. Rossi and Nesreen K. Ahmed. 2015. The Network Data Repository with InteractiveGraphAnalyticsandVisualization.InAAAI.  You can find the original dataset here: http://networkrepository.com"
 
+# Additional experiments.
+
+## Personalized fairness distribution.
+
+![personalized distributions](https://github.com/SotirisTsioutsiouliklis/FairLaR/blob/master/img/datasets_header.jpg)
+
 TODO:
 -----
 
