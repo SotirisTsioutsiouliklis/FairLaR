@@ -66,6 +66,30 @@ All the experiments were made in linux Ubuntu. To compile cpp we used gcc compil
       `python targeted_optimal.py 0.5 10`<br/><br/>
       `python targeted_topk.py 0.5 10`
 
+6. LFPR_O
+
+    Before compile the `residual_stochastic_opt.cpp` scipt you can change the parameters of the stochastic optimization algorithm. i.e.
+    
+        // Parameters
+        int MAX_ITERATIONS = 30;
+        int NUMBER_OF_DIRECTIONS = 30;
+        double PRECISION_OF_SOLUTION = pow(10, -8);
+        double PRECISION_OF_CAT_RATIO = pow(10, -4);
+        int TIMES_TO_TRY_FOR_INITIAL_POINT = 100;
+        double INITIAL_STEP = 1.0;
+        int SMALLER_ALLOWED_STEP = pow(10, -10);
+
+    You can also select the starting point based on one of the Local algorithms or choose a random one. Comment/uncomment the corresponing line.
+    
+        // Initialize start point.
+        // current_point = algs.get_proportional_excess_vector();
+        // current_point = get_uniform_initial_point(g);
+        current_point = get_random_initial_point();
+    
+    Finally, run inside the dataset folder by providing the phi parameter as a command line argument. 
+
+    > `residual_optimization.out 0.5`
+
 Datasets Description.
 ---------
 Datasets provided have been collected from various resources. They are graphs with a binary attribute for each node. Every dataset is consisted of two txt files. "out_graph.txt" and "out_community.txt".
